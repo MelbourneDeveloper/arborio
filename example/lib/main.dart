@@ -143,6 +143,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
+        theme: ThemeData(useMaterial3: true),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: PreferredSize(
@@ -154,84 +155,88 @@ class MyApp extends StatelessWidget {
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                 child: AppBar(
-                  backgroundColor: Colors.white.withOpacity(0.5),
-                  title: const Text('Awesome Treeview Sample'),
-                  leading: const Icon(Icons.chevron_left),
-                  elevation: 0,
+                  backgroundColor: Colors.black.withOpacity(0.2),
+                  title: const Text('Arborio Sample'),
+                  elevation: 3,
                 ),
               ),
             ),
           ),
-          body: TreeView(
-            animationCurve: Curves.easeInCirc,
-            builder: (
-              context,
-              node,
-              isSelected,
-              expansionAnimation,
-              select,
-            ) =>
-                switch (node.title.type) {
-              (ElementType.file) => InkWell(
-                  onTap: () => select(node),
-                  // ignore: use_decorated_box
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      gradient: isSelected
-                          ? LinearGradient(
-                              colors: [
-                                Colors.lightBlueAccent.withOpacity(0.6),
-                                Colors.lightBlueAccent.withOpacity(0),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            )
-                          : null,
-                      borderRadius: BorderRadius.circular(4),
+          body: Stack(
+            children: [
+              TreeView(
+                animationCurve: Curves.easeInCirc,
+                builder: (
+                  context,
+                  node,
+                  isSelected,
+                  expansionAnimation,
+                  select,
+                ) =>
+                    switch (node.title.type) {
+                  (ElementType.file) => InkWell(
+                      onTap: () => select(node),
+                      // ignore: use_decorated_box
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          gradient: isSelected
+                              ? LinearGradient(
+                                  colors: [
+                                    Colors.lightBlueAccent.withOpacity(0.6),
+                                    Colors.lightBlueAccent.withOpacity(0),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                )
+                              : null,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                switch (path
+                                    .extension(node.title.name)
+                                    .toLowerCase()) {
+                                  ('.mp3') => 'assets/images/music.png',
+                                  ('.py') => 'assets/images/python.png',
+                                  ('.jpg') => 'assets/images/image.png',
+                                  ('.png') => 'assets/images/image.png',
+                                  ('.dart') => 'assets/images/dart.png',
+                                  ('.json') => 'assets/images/json.png',
+                                  (_) => 'assets/images/file.png'
+                                },
+                                width: 32,
+                                height: 32,
+                              ),
+                              const SizedBox(width: 16),
+                              Text(node.title.name),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            switch (
-                                path.extension(node.title.name).toLowerCase()) {
-                              ('.mp3') => 'assets/images/music.png',
-                              ('.py') => 'assets/images/python.png',
-                              ('.jpg') => 'assets/images/image.png',
-                              ('.png') => 'assets/images/image.png',
-                              ('.dart') => 'assets/images/dart.png',
-                              ('.json') => 'assets/images/json.png',
-                              (_) => 'assets/images/file.png'
-                            },
+                  (ElementType.folder) => Row(
+                      children: [
+                        RotationTransition(
+                          turns: expansionAnimation,
+                          child: Image.asset(
+                            'assets/images/folder.png',
                             width: 32,
                             height: 32,
                           ),
-                          const SizedBox(width: 16),
-                          Text(node.title.name),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 16),
+                        Text(node.title.name),
+                      ],
                     ),
-                  ),
-                ),
-              (ElementType.folder) => Row(
-                  children: [
-                    RotationTransition(
-                      turns: expansionAnimation,
-                      child: Image.asset(
-                        'assets/images/folder.png',
-                        width: 32,
-                        height: 32,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Text(node.title.name),
-                  ],
-                ),
-            },
-            nodes: nodes,
-            expanderIcon: const Icon(Icons.chevron_right),
+                },
+                nodes: nodes,
+                expanderIcon: const Icon(Icons.chevron_right),
+              ),
+            ],
           ),
         ),
       );
