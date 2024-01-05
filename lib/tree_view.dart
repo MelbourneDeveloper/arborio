@@ -70,11 +70,7 @@ class _TreeViewState<T> extends State<TreeView<T>> {
   void initState() {
     super.initState();
     _selectedNode = widget.selectedNode;
-    // ignore: prefer_foreach
-    for (final asdasd in widget.nodes) {
-      listen(asdasd);
-    }
-    //widget.nodes.map(listen);
+    widget.nodes.forEach(listen);
   }
 
   void listen(TreeNode<T> node) {
