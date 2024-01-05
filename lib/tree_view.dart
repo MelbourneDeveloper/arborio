@@ -3,6 +3,10 @@
 import 'package:arborio/expander.dart';
 import 'package:flutter/material.dart';
 
+class TreeViewKey<T> extends GlobalKey<_TreeViewState<T>> {
+  const TreeViewKey() : super.constructor();
+}
+
 typedef TreeViewItemBuilder<T> = Widget Function(
   BuildContext context,
   TreeNode<T> node,
@@ -17,11 +21,17 @@ void _defaultExpansionChanged<T>(TreeNode<T> node, bool expanded) {}
 void _defaultSelectionChanged<T>(TreeNode<T> node) {}
 
 class TreeNode<T> {
-  TreeNode(this.key, this.title, [List<TreeNode<T>>? children])
-      : children = children ?? <TreeNode<T>>[];
+  TreeNode(
+    this.key,
+    this.data, [
+    List<TreeNode<T>>? children,
+    bool isExpanded = false,
+  ])  : children = children ?? <TreeNode<T>>[],
+        isExpanded = ValueNotifier(isExpanded);
   final Key key;
-  final T title;
+  final T data;
   final List<TreeNode<T>> children;
+  ValueNotifier<bool> isExpanded;
 }
 
 class TreeView<T> extends StatefulWidget {
@@ -55,12 +65,45 @@ class TreeView<T> extends StatefulWidget {
 
 class _TreeViewState<T> extends State<TreeView<T>> {
   TreeNode<T>? _selectedNode;
-  final Map<Key, bool> _expandedState = {};
 
   @override
   void initState() {
     super.initState();
     _selectedNode = widget.selectedNode;
+    // ignore: prefer_foreach
+    for (final asdasd in widget.nodes) {
+      listen(asdasd);
+    }
+    //widget.nodes.map(listen);
+  }
+
+  void listen(TreeNode<T> node) {
+    node.children.forEach(listen);
+    node.isExpanded.addListener(() {
+      // ignore: avoid_print
+      print('asd');
+      setState(() {});
+    });
+  }
+
+  void collapseAll() => setState(() {
+        for (final node in widget.nodes) {
+          _setIsExpanded(node, false);
+        }
+      });
+
+  void expandAll() => setState(() {
+        for (final node in widget.nodes) {
+          _setIsExpanded(node, true);
+        }
+      });
+
+  void _setIsExpanded(TreeNode<T> node, bool isExpanded) {
+    for (final n in node.children) {
+      _setIsExpanded(n, isExpanded);
+    }
+
+    node.isExpanded.value = isExpanded;
   }
 
   void _handleSelection(TreeNode<T> node) {
@@ -103,11 +146,11 @@ class _TreeViewState<T> extends State<TreeView<T>> {
                 ),
                 onExpansionChanged: (expanded) {
                   setState(() {
-                    _expandedState[node.key] = expanded;
+                    node.isExpanded.value = expanded;
                   });
                   expansionChanged(node, expanded);
                 },
-                isExpanded: _expandedState[node.key] ?? false,
+                isExpanded: node.isExpanded.value,
                 children: node.children
                     .map((childNode) => _buildNode(childNode, expansionChanged))
                     .toList(),
@@ -116,4 +159,15 @@ class _TreeViewState<T> extends State<TreeView<T>> {
           ],
         ),
       );
+
+  @override
+  void dispose() {
+    for (final node in widget.nodes) {
+      for (final childNode in node.children) {
+        childNode.isExpanded.dispose();
+      }
+      node.isExpanded.dispose();
+    }
+    super.dispose();
+  }
 }

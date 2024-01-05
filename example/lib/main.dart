@@ -2,7 +2,7 @@
 
 import 'dart:ui';
 
-import 'package:arborio/tree.dart';
+import 'package:arborio/tree_view.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 
@@ -16,7 +16,7 @@ class FileSystemElement {
 }
 
 // Initialize your tree nodes with FileSystemElement type
-List<TreeNode<FileSystemElement>> nodes = [
+List<TreeNode<FileSystemElement>> fileTree = [
   TreeNode<FileSystemElement>(
     const Key('Projects'),
     FileSystemElement('Projects', ElementType.folder),
@@ -146,6 +146,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final treeViewKey = const TreeViewKey<FileSystemElement>();
+  //TreeNode<FileSystemElement>? _selectedNode;
+
   @override
   Widget build(BuildContext context) => MaterialApp(
         theme: ThemeData(
@@ -174,7 +177,7 @@ class _MyAppState extends State<MyApp> {
           body: Stack(
             children: [
               Opacity(
-                opacity: .05,
+                opacity: .025,
                 child: Image.asset(
                   'assets/images/arborio_transparent.png',
                   fit: BoxFit.cover,
@@ -186,29 +189,50 @@ class _MyAppState extends State<MyApp> {
               Positioned(
                 right: 16,
                 bottom: 16,
-                child: Row(
-                  children: [
-                    FloatingActionButton(
-                      tooltip: 'Add Folder',
-                      onPressed: () => setState(
-                        () => nodes.add(
-                          TreeNode(
-                            const Key('newnode'),
-                            FileSystemElement('New Folder', ElementType.folder),
-                          ),
-                        ),
-                      ),
-                      child: const Icon(Icons.add),
-                    ),
-                  ],
-                ),
+                child: _buttonRow(),
               ),
             ],
           ),
         ),
       );
 
+  Row _buttonRow() => Row(
+        children: [
+          FloatingActionButton(
+            tooltip: 'Add',
+            onPressed: () => setState(
+              () => fileTree.add(
+                TreeNode(
+                  const Key('newnode'),
+                  FileSystemElement(
+                    'New Folder',
+                    ElementType.folder,
+                  ),
+                ),
+              ),
+            ),
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(width: 16),
+          FloatingActionButton(
+            tooltip: 'Expand All',
+            onPressed: () =>
+                setState(() => treeViewKey.currentState!.expandAll()),
+            child: const Icon(Icons.expand),
+          ),
+          const SizedBox(width: 16),
+          FloatingActionButton(
+            tooltip: 'Collapse All',
+            onPressed: () =>
+                setState(() => treeViewKey.currentState!.collapseAll()),
+            child: const Icon(Icons.close),
+          ),
+        ],
+      );
+
   TreeView<FileSystemElement> _treeView() => TreeView(
+        //onSelectionChanged: (node) => setState(() => _selectedNode = node),
+        key: treeViewKey,
         animationCurve: Curves.easeInCirc,
         builder: (
           context,
@@ -217,7 +241,7 @@ class _MyAppState extends State<MyApp> {
           expansionAnimation,
           select,
         ) =>
-            switch (node.title.type) {
+            switch (node.data.type) {
           (ElementType.file) => InkWell(
               onTap: () => select(node),
               // ignore: use_decorated_box
@@ -247,7 +271,7 @@ class _MyAppState extends State<MyApp> {
                   child: Row(
                     children: [
                       Image.asset(
-                        switch (path.extension(node.title.name).toLowerCase()) {
+                        switch (path.extension(node.data.name).toLowerCase()) {
                           ('.mp3') => 'assets/images/music.png',
                           ('.py') => 'assets/images/python.png',
                           ('.jpg') => 'assets/images/image.png',
@@ -260,7 +284,7 @@ class _MyAppState extends State<MyApp> {
                         height: 32,
                       ),
                       const SizedBox(width: 16),
-                      Text(node.title.name),
+                      Text(node.data.name),
                     ],
                   ),
                 ),
@@ -277,11 +301,11 @@ class _MyAppState extends State<MyApp> {
                   ),
                 ),
                 const SizedBox(width: 16),
-                Text(node.title.name),
+                Text(node.data.name),
               ],
             ),
         },
-        nodes: nodes,
+        nodes: fileTree,
         expanderIcon: const Icon(Icons.chevron_right),
       );
 }
