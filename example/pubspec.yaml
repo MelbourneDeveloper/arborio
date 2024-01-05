@@ -9,11 +9,12 @@ environment:
   sdk: ">=3.2.3 <4.0.0"
 
 dependencies:
+  arbor:
+    path: ..
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
-  treeview:
-    path: ..
+
  
 dev_dependencies:
   austerity: ^1.1.0

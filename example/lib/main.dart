@@ -2,9 +2,9 @@
 
 import 'dart:ui';
 
+import 'package:arbor/tree.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
-import 'package:treeview/tree_view.dart';
 
 enum ElementType { file, folder }
 
