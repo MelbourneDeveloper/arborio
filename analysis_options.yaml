@@ -1,0 +1,11 @@
+
+include: package:austerity/analysis_options.yaml
+
+linter:
+  rules:
+
+analyzer: 
+  errors:
+    diagnostic_describe_all_properties: ignore
+    dead_null_aware_expression: error
+ 
