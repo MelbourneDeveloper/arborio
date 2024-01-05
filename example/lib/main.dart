@@ -2,7 +2,7 @@
 
 import 'dart:ui';
 
-import 'package:arborio/tree.dart';
+import 'package:arborio/tree_view.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 
@@ -16,7 +16,7 @@ class FileSystemElement {
 }
 
 // Initialize your tree nodes with FileSystemElement type
-List<TreeNode<FileSystemElement>> nodes = [
+List<TreeNode<FileSystemElement>> fileTree = [
   TreeNode<FileSystemElement>(
     const Key('Projects'),
     FileSystemElement('Projects', ElementType.folder),
@@ -146,6 +146,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final treeViewKey = const TreeViewKey<FileSystemElement>();
+  String _selectedCurve = 'easeInOut';
+  int _animationDuration = 500;
+  final textEditingController = TextEditingController(text: '500');
+  TreeNode<FileSystemElement>? _selectedNode;
+
   @override
   Widget build(BuildContext context) => MaterialApp(
         theme: ThemeData(
@@ -165,7 +171,7 @@ class _MyAppState extends State<MyApp> {
                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                 child: AppBar(
                   backgroundColor: Colors.black.withOpacity(0.2),
-                  title: const Text('Arborio Sample'),
+                  title: Text(_title()),
                   elevation: 3,
                 ),
               ),
@@ -174,7 +180,7 @@ class _MyAppState extends State<MyApp> {
           body: Stack(
             children: [
               Opacity(
-                opacity: .05,
+                opacity: .025,
                 child: Image.asset(
                   'assets/images/arborio_transparent.png',
                   fit: BoxFit.cover,
@@ -186,30 +192,182 @@ class _MyAppState extends State<MyApp> {
               Positioned(
                 right: 16,
                 bottom: 16,
-                child: Row(
-                  children: [
-                    FloatingActionButton(
-                      tooltip: 'Add Folder',
-                      onPressed: () => setState(
-                        () => nodes.add(
-                          TreeNode(
-                            const Key('newnode'),
-                            FileSystemElement('New Folder', ElementType.folder),
-                          ),
+                child: _buttonRow(),
+              ),
+              Positioned(
+                bottom: 16,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: SizedBox(
+                    width: 200,
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
                         ),
+                        labelText: 'Animation Duration (ms)',
                       ),
-                      child: const Icon(Icons.add),
+                      onChanged: (v) {
+                        setState(() {
+                          _animationDuration = int.tryParse(v) ?? 500;
+                        });
+                      },
+                      controller: textEditingController,
                     ),
-                  ],
+                  ),
                 ),
               ),
+              _curveDropDown(),
             ],
           ),
         ),
       );
 
+  String _title() => 'Arborio Sample${_selectedNode != null ? ' - '
+      '${_selectedNode!.data.name}' : ''}';
+
+  Positioned _curveDropDown() => Positioned(
+        left: 16,
+        bottom: 16,
+        child: Row(
+          children: [
+            DropdownMenu<String>(
+              label: const Text('Animation Curve'),
+              onSelected: (v) => _selectedCurve = v ?? _selectedCurve,
+              initialSelection: _selectedCurve,
+              dropdownMenuEntries: const [
+                DropdownMenuEntry(value: 'bounceIn', label: 'bounceIn'),
+                DropdownMenuEntry(value: 'bounceInOut', label: 'bounceInOut'),
+                DropdownMenuEntry(value: 'bounceOut', label: 'bounceOut'),
+                DropdownMenuEntry(value: 'ease', label: 'ease'),
+                DropdownMenuEntry(value: 'easeIn', label: 'easeIn'),
+                DropdownMenuEntry(value: 'easeInBack', label: 'easeInBack'),
+                DropdownMenuEntry(value: 'easeInCirc', label: 'easeInCirc'),
+                DropdownMenuEntry(value: 'easeInExpo', label: 'easeInExpo'),
+                DropdownMenuEntry(value: 'easeInOut', label: 'easeInOut'),
+                DropdownMenuEntry(
+                  value: 'easeInOutBack',
+                  label: 'easeInOutBack',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInOutCirc',
+                  label: 'easeInOutCirc',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInOutExpo',
+                  label: 'easeInOutExpo',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInOutQuad',
+                  label: 'easeInOutQuad',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInOutQuart',
+                  label: 'easeInOutQuart',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInOutQuint',
+                  label: 'easeInOutQuint',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInOutSine',
+                  label: 'easeInOutSine',
+                ),
+                DropdownMenuEntry(value: 'easeInQuad', label: 'easeInQuad'),
+                DropdownMenuEntry(value: 'easeInQuart', label: 'easeInQuart'),
+                DropdownMenuEntry(value: 'easeInQuint', label: 'easeInQuint'),
+                DropdownMenuEntry(value: 'easeInSine', label: 'easeInSine'),
+                DropdownMenuEntry(value: 'easeOut', label: 'easeOut'),
+                DropdownMenuEntry(value: 'easeOutBack', label: 'easeOutBack'),
+                DropdownMenuEntry(value: 'easeOutCirc', label: 'easeOutCirc'),
+                DropdownMenuEntry(value: 'easeOutExpo', label: 'easeOutExpo'),
+                DropdownMenuEntry(value: 'easeOutQuad', label: 'easeOutQuad'),
+                DropdownMenuEntry(value: 'easeOutQuart', label: 'easeOutQuart'),
+                DropdownMenuEntry(value: 'easeOutQuint', label: 'easeOutQuint'),
+                DropdownMenuEntry(value: 'easeOutSine', label: 'easeOutSine'),
+                DropdownMenuEntry(value: 'elasticIn', label: 'elasticIn'),
+                DropdownMenuEntry(value: 'elasticInOut', label: 'elasticInOut'),
+                DropdownMenuEntry(value: 'elasticOut', label: 'elasticOut'),
+                DropdownMenuEntry(value: 'linear', label: 'linear'),
+              ],
+            ),
+          ],
+        ),
+      );
+
+  Row _buttonRow() => Row(
+        children: [
+          FloatingActionButton(
+            tooltip: 'Add',
+            onPressed: () => setState(
+              () => fileTree.add(
+                TreeNode(
+                  const Key('newnode'),
+                  FileSystemElement(
+                    'New Folder',
+                    ElementType.folder,
+                  ),
+                ),
+              ),
+            ),
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(width: 16),
+          FloatingActionButton(
+            tooltip: 'Expand All',
+            onPressed: () =>
+                setState(() => treeViewKey.currentState!.expandAll()),
+            child: const Icon(Icons.expand),
+          ),
+          const SizedBox(width: 16),
+          FloatingActionButton(
+            tooltip: 'Collapse All',
+            onPressed: () =>
+                setState(() => treeViewKey.currentState!.collapseAll()),
+            child: const Icon(Icons.compress),
+          ),
+        ],
+      );
+
   TreeView<FileSystemElement> _treeView() => TreeView(
-        animationCurve: Curves.easeInCirc,
+        onSelectionChanged: (node) => setState(() => _selectedNode = node),
+        key: treeViewKey,
+        animationDuration: Duration(milliseconds: _animationDuration),
+        animationCurve: switch (_selectedCurve) {
+          ('bounceIn') => Curves.bounceIn,
+          ('bounceInOut') => Curves.bounceInOut,
+          ('bounceOut') => Curves.bounceOut,
+          ('easeInCirc') => Curves.easeInCirc,
+          ('easeInOutExpo') => Curves.easeInOutExpo,
+          ('elasticInOut') => Curves.elasticInOut,
+          ('easeInOut') => Curves.easeInOut,
+          ('easeOutCirc') => Curves.easeOutCirc,
+          ('elasticOut') => Curves.elasticOut,
+          ('elasticIn') => Curves.elasticIn,
+          ('easeIn') => Curves.easeIn,
+          ('ease') => Curves.ease,
+          ('easeInBack') => Curves.easeInBack,
+          ('easeOutBack') => Curves.easeOutBack,
+          ('easeInOutBack') => Curves.easeInOutBack,
+          ('easeInSine') => Curves.easeInSine,
+          ('easeOutSine') => Curves.easeOutSine,
+          ('easeInOutSine') => Curves.easeInOutSine,
+          ('easeInQuad') => Curves.easeInQuad,
+          ('easeOutQuad') => Curves.easeOutQuad,
+          ('easeInOutQuad') => Curves.easeInOutQuad,
+          ('easeInQuart') => Curves.easeInQuart,
+          ('easeOutQuart') => Curves.easeOutQuart,
+          ('easeInOutQuart') => Curves.easeInOutQuart,
+          ('easeInQuint') => Curves.easeInQuint,
+          ('easeOutQuint') => Curves.easeOutQuint,
+          ('easeInOutQuint') => Curves.easeInOutQuint,
+          ('easeInExpo') => Curves.easeInExpo,
+          ('easeOutExpo') => Curves.easeOutExpo,
+          ('linear') => Curves.linear,
+          _ => Curves.easeInOut,
+        },
         builder: (
           context,
           node,
@@ -217,7 +375,7 @@ class _MyAppState extends State<MyApp> {
           expansionAnimation,
           select,
         ) =>
-            switch (node.title.type) {
+            switch (node.data.type) {
           (ElementType.file) => InkWell(
               onTap: () => select(node),
               // ignore: use_decorated_box
@@ -247,7 +405,7 @@ class _MyAppState extends State<MyApp> {
                   child: Row(
                     children: [
                       Image.asset(
-                        switch (path.extension(node.title.name).toLowerCase()) {
+                        switch (path.extension(node.data.name).toLowerCase()) {
                           ('.mp3') => 'assets/images/music.png',
                           ('.py') => 'assets/images/python.png',
                           ('.jpg') => 'assets/images/image.png',
@@ -260,7 +418,7 @@ class _MyAppState extends State<MyApp> {
                         height: 32,
                       ),
                       const SizedBox(width: 16),
-                      Text(node.title.name),
+                      Text(node.data.name),
                     ],
                   ),
                 ),
@@ -277,11 +435,11 @@ class _MyAppState extends State<MyApp> {
                   ),
                 ),
                 const SizedBox(width: 16),
-                Text(node.title.name),
+                Text(node.data.name),
               ],
             ),
         },
-        nodes: nodes,
+        nodes: fileTree,
         expanderIcon: const Icon(Icons.chevron_right),
       );
 }

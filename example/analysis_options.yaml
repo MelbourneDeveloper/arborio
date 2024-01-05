@@ -8,4 +8,5 @@ analyzer:
   errors:
     diagnostic_describe_all_properties: ignore
     dead_null_aware_expression: error
+    invalid_null_aware_operator: error
  

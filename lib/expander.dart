@@ -11,8 +11,8 @@ class Expander<T> extends StatefulWidget {
     required this.builder,
     required this.children,
     required this.onExpansionChanged,
+    required this.isExpanded,
     this.canExpand = true,
-    this.isExpanded = false,
     super.key,
     this.expanderIcon,
     this.animationCurve = Curves.easeInOut,
@@ -21,7 +21,7 @@ class Expander<T> extends StatefulWidget {
 
   final List<Widget> children;
   final ValueChanged<bool> onExpansionChanged;
-  final bool isExpanded;
+  final ValueNotifier<bool> isExpanded;
   final bool canExpand;
   final Widget? expanderIcon;
   final ExpanderItemBuilder builder;
@@ -33,49 +33,83 @@ class Expander<T> extends StatefulWidget {
 }
 
 class _ExpanderState<T> extends State<Expander<T>>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _iconAnimation;
   late Animation<double> _sizeFactor;
+  late ValueNotifier<bool> isExpanded;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: widget.animationDuration,
-      vsync: this,
-    );
+    isExpanded = widget.isExpanded;
+    initAnimation();
+  }
+
+  @override
+  void didUpdateWidget(Expander<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _controller.duration = widget.animationDuration;
+
     _iconAnimation = Tween<double>(begin: 0, end: 0.25).animate(
       CurvedAnimation(
         parent: _controller,
         curve: widget.animationCurve,
       ),
     );
+
     _sizeFactor = CurvedAnimation(
       parent: _controller,
       curve: widget.animationCurve,
     );
 
-    if (widget.isExpanded) {
+    isExpanded
+      ..removeListener(_animate)
+      ..addListener(_animate);
+  }
+
+  void initAnimation() {
+    isExpanded.addListener(_animate);
+    _controller = AnimationController(
+      duration: widget.animationDuration,
+      vsync: this,
+    );
+
+    _iconAnimation = Tween<double>(begin: 0, end: 0.25).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: widget.animationCurve,
+      ),
+    );
+
+    _sizeFactor = CurvedAnimation(
+      parent: _controller,
+      curve: widget.animationCurve,
+    );
+
+    if (widget.isExpanded.value) {
       _controller.value = 1.0;
     }
   }
 
   @override
   void dispose() {
+    widget.isExpanded.removeListener(_animate);
     _controller.dispose();
     super.dispose();
   }
 
   void _handleTap() {
-    setState(() {
-      if (widget.isExpanded) {
-        _controller.reverse();
-      } else {
-        _controller.forward();
-      }
-      widget.onExpansionChanged(!widget.isExpanded);
-    });
+    widget.onExpansionChanged(!widget.isExpanded.value);
+    setState(_animate);
+  }
+
+  void _animate() {
+    if (widget.isExpanded.value) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
   }
 
   @override
@@ -93,7 +127,7 @@ class _ExpanderState<T> extends State<Expander<T>>
                 : null,
             title: widget.builder(
               context,
-              widget.isExpanded,
+              widget.isExpanded.value,
               _sizeFactor,
             ),
           ),
