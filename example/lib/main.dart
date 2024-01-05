@@ -176,35 +176,42 @@ class MyApp extends StatelessWidget {
                   onTap: () => select(node),
                   // ignore: use_decorated_box
                   child: Container(
-                    decoration: isSelected
-                        ? BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            gradient: const LinearGradient(
-                              colors: [Colors.blue, Colors.purple],
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                      gradient: isSelected
+                          ? LinearGradient(
+                              colors: [
+                                Colors.lightBlueAccent.withOpacity(0.6),
+                                Colors.lightBlueAccent.withOpacity(0),
+                              ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
-                            ),
-                          )
-                        : null,
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          switch (
-                              path.extension(node.title.name).toLowerCase()) {
-                            ('.mp3') => 'assets/images/music.png',
-                            ('.py') => 'assets/images/python.png',
-                            ('.jpg') => 'assets/images/image.png',
-                            ('.png') => 'assets/images/image.png',
-                            ('.dart') => 'assets/images/dart.png',
-                            ('.json') => 'assets/images/json.png',
-                            (_) => 'assets/images/file.png'
-                          },
-                          width: 32,
-                          height: 32,
-                        ),
-                        const SizedBox(width: 16),
-                        Text(node.title.name),
-                      ],
+                            )
+                          : null,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            switch (
+                                path.extension(node.title.name).toLowerCase()) {
+                              ('.mp3') => 'assets/images/music.png',
+                              ('.py') => 'assets/images/python.png',
+                              ('.jpg') => 'assets/images/image.png',
+                              ('.png') => 'assets/images/image.png',
+                              ('.dart') => 'assets/images/dart.png',
+                              ('.json') => 'assets/images/json.png',
+                              (_) => 'assets/images/file.png'
+                            },
+                            width: 32,
+                            height: 32,
+                          ),
+                          const SizedBox(width: 16),
+                          Text(node.title.name),
+                        ],
+                      ),
                     ),
                   ),
                 ),
