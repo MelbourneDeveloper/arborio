@@ -33,7 +33,7 @@ class Expander<T> extends StatefulWidget {
 }
 
 class _ExpanderState<T> extends State<Expander<T>>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _iconAnimation;
   late Animation<double> _sizeFactor;
@@ -41,6 +41,32 @@ class _ExpanderState<T> extends State<Expander<T>>
   @override
   void initState() {
     super.initState();
+    initAnimation();
+
+    widget.isExpanded.addListener(() {
+      if (!mounted) return;
+      if (widget.isExpanded.value) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+    });
+  }
+
+  @override
+  void didUpdateWidget(Expander<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    initAnimation();
+    // if (oldWidget.isExpanded != widget.isExpanded) {
+    //   if (widget.isExpanded.value) {
+    //     _controller.forward();
+    //   } else {
+    //     _controller.reverse();
+    //   }
+    // }
+  }
+
+  void initAnimation() {
     _controller = AnimationController(
       duration: widget.animationDuration,
       vsync: this,
@@ -59,15 +85,6 @@ class _ExpanderState<T> extends State<Expander<T>>
     if (widget.isExpanded.value) {
       _controller.value = 1.0;
     }
-
-    widget.isExpanded.addListener(() {
-      if (!mounted) return;
-      if (widget.isExpanded.value) {
-        _controller.forward();
-      } else {
-        _controller.reverse();
-      }
-    });
   }
 
   @override

@@ -225,7 +225,7 @@ class _MyAppState extends State<MyApp> {
                 child: Row(
                   children: [
                     DropdownMenu<String>(
-                      hintText: 'Expand Animation Curve',
+                      label: const Text('Animation Curve'),
                       onSelected: (v) => _selectedCurve = v ?? _selectedCurve,
                       initialSelection: _selectedCurve,
                       dropdownMenuEntries: const [
