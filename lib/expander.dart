@@ -34,36 +34,23 @@ class Expander<T> extends StatefulWidget {
 
 class _ExpanderState<T> extends State<Expander<T>>
     with TickerProviderStateMixin {
-  late AnimationController _controller;
+  AnimationController? _controller;
   late Animation<double> _iconAnimation;
   late Animation<double> _sizeFactor;
+  late ValueNotifier<bool> isExpanded;
 
   @override
   void initState() {
     super.initState();
+    isExpanded = widget.isExpanded;
     initAnimation();
-
-    widget.isExpanded.addListener(() {
-      if (!mounted) return;
-      if (widget.isExpanded.value) {
-        _controller.forward();
-      } else {
-        _controller.reverse();
-      }
-    });
   }
 
   @override
   void didUpdateWidget(Expander<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
+    isExpanded = widget.isExpanded;
     initAnimation();
-    // if (oldWidget.isExpanded != widget.isExpanded) {
-    //   if (widget.isExpanded.value) {
-    //     _controller.forward();
-    //   } else {
-    //     _controller.reverse();
-    //   }
-    // }
   }
 
   void initAnimation() {
@@ -71,37 +58,43 @@ class _ExpanderState<T> extends State<Expander<T>>
       duration: widget.animationDuration,
       vsync: this,
     );
+
+    isExpanded.addListener(_animate);
     _iconAnimation = Tween<double>(begin: 0, end: 0.25).animate(
       CurvedAnimation(
-        parent: _controller,
+        parent: _controller!,
         curve: widget.animationCurve,
       ),
     );
     _sizeFactor = CurvedAnimation(
-      parent: _controller,
+      parent: _controller!,
       curve: widget.animationCurve,
     );
 
     if (widget.isExpanded.value) {
-      _controller.value = 1.0;
+      _controller!.value = 1.0;
     }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
+    widget.isExpanded.removeListener(_animate);
+    _controller?.dispose();
+    _controller = null;
   }
 
   void _handleTap() {
-    setState(() {
-      if (widget.isExpanded.value) {
-        _controller.reverse();
-      } else {
-        _controller.forward();
-      }
-      widget.onExpansionChanged(!widget.isExpanded.value);
-    });
+    widget.onExpansionChanged(!widget.isExpanded.value);
+    setState(_animate);
+  }
+
+  void _animate() {
+    if (widget.isExpanded.value) {
+      _controller?.reverse();
+    } else {
+      _controller?.forward();
+    }
   }
 
   @override
