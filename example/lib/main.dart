@@ -440,6 +440,9 @@ class _MyAppState extends State<MyApp> {
             ),
         },
         nodes: fileTree,
-        expanderIcon: const Icon(Icons.chevron_right),
+        expanderIcon: Text(
+          '👉',
+          style: Theme.of(context).textTheme.headlineLarge,
+        ),
       );
 }
