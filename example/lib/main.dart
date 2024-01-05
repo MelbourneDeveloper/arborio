@@ -143,9 +143,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-        theme: ThemeData(useMaterial3: true),
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF44AD4D)),
+        ),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
+          backgroundColor: const Color(0xFFFEFCE5),
           appBar: PreferredSize(
             preferredSize: const Size(
               double.infinity,
@@ -165,7 +169,7 @@ class MyApp extends StatelessWidget {
           body: Stack(
             children: [
               Opacity(
-                opacity: .1,
+                opacity: .05,
                 child: Image.asset(
                   'assets/images/arborio_transparent.png',
                   fit: BoxFit.cover,
@@ -174,13 +178,18 @@ class MyApp extends StatelessWidget {
                 ),
               ),
               _treeView(),
-              Row(
-                children: [
-                  FloatingActionButton(
-                    onPressed: () {},
-                    child: const Icon(Icons.add),
-                  ),
-                ],
+              Positioned(
+                right: 16,
+                bottom: 16,
+                child: Row(
+                  children: [
+                    FloatingActionButton(
+                      tooltip: 'Add Folder',
+                      onPressed: () {},
+                      child: const Icon(Icons.add),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -206,8 +215,14 @@ class MyApp extends StatelessWidget {
                   gradient: isSelected
                       ? LinearGradient(
                           colors: [
-                            Colors.lightBlueAccent.withOpacity(0.6),
-                            Colors.lightBlueAccent.withOpacity(0),
+                            Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(.3),
+                            Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(.1),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
