@@ -61,6 +61,7 @@ class _ExpanderState<T> extends State<Expander<T>>
     }
 
     widget.isExpanded.addListener(() {
+      if (!mounted) return;
       if (widget.isExpanded.value) {
         _controller.forward();
       } else {
