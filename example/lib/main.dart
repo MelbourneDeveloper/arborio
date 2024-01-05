@@ -147,6 +147,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final treeViewKey = const TreeViewKey<FileSystemElement>();
+  String _selectedCurve = 'easeInOut';
   //TreeNode<FileSystemElement>? _selectedNode;
 
   @override
@@ -191,6 +192,33 @@ class _MyAppState extends State<MyApp> {
                 bottom: 16,
                 child: _buttonRow(),
               ),
+              //const Positioned(bottom: 16, child: TextField()),
+              Positioned(
+                left: 16,
+                bottom: 16,
+                child: Row(
+                  children: [
+                    DropdownMenu<String>(
+                      onSelected: (v) => _selectedCurve = v ?? _selectedCurve,
+                      initialSelection: _selectedCurve,
+                      dropdownMenuEntries: const [
+                        DropdownMenuEntry(
+                          value: 'easeInOut',
+                          label: 'easeInOut',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeInCirc',
+                          label: 'easeInCirc',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeOutCirc',
+                          label: 'easeOutCirc',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -233,7 +261,11 @@ class _MyAppState extends State<MyApp> {
   TreeView<FileSystemElement> _treeView() => TreeView(
         //onSelectionChanged: (node) => setState(() => _selectedNode = node),
         key: treeViewKey,
-        animationCurve: Curves.easeInCirc,
+        animationCurve: switch (_selectedCurve) {
+          ('easeInCirc') => Curves.easeInCirc,
+          ('easeInOutExpo') => Curves.easeInOutExpo,
+          _ => Curves.easeInOut,
+        },
         builder: (
           context,
           node,
