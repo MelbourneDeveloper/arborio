@@ -241,6 +241,102 @@ class _MyAppState extends State<MyApp> {
                           value: 'easeOutCirc',
                           label: 'easeOutCirc',
                         ),
+                        DropdownMenuEntry(
+                          value: 'elasticInOut',
+                          label: 'elasticInOut',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeInOutExpo',
+                          label: 'easeInOutExpo',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'elasticOut',
+                          label: 'elasticOut',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'elasticIn',
+                          label: 'elasticIn',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeIn',
+                          label: 'easeIn',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'ease',
+                          label: 'ease',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeInBack',
+                          label: 'easeInBack',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeOutBack',
+                          label: 'easeOutBack',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeInOutBack',
+                          label: 'easeInOutBack',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeInSine',
+                          label: 'easeInSine',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeOutSine',
+                          label: 'easeOutSine',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeInOutSine',
+                          label: 'easeInOutSine',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeInQuad',
+                          label: 'easeInQuad',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeOutQuad',
+                          label: 'easeOutQuad',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeInOutQuad',
+                          label: 'easeInOutQuad',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeInQuart',
+                          label: 'easeInQuart',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeOutQuart',
+                          label: 'easeOutQuart',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeInOutQuart',
+                          label: 'easeInOutQuart',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeInQuint',
+                          label: 'easeInQuint',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeOutQuint',
+                          label: 'easeOutQuint',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeInOutQuint',
+                          label: 'easeInOutQuint',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeInExpo',
+                          label: 'easeInExpo',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'easeOutExpo',
+                          label: 'easeOutExpo',
+                        ),
+                        DropdownMenuEntry(
+                          value: 'linear',
+                          label: 'linear',
+                        ),
                       ],
                     ),
                   ],
@@ -292,6 +388,31 @@ class _MyAppState extends State<MyApp> {
         animationCurve: switch (_selectedCurve) {
           ('easeInCirc') => Curves.easeInCirc,
           ('easeInOutExpo') => Curves.easeInOutExpo,
+          ('elasticInOut') => Curves.elasticInOut,
+          ('easeInOut') => Curves.easeInOut,
+          ('easeOutCirc') => Curves.easeOutCirc,
+          ('elasticOut') => Curves.elasticOut,
+          ('elasticIn') => Curves.elasticIn,
+          ('easeIn') => Curves.easeIn,
+          ('ease') => Curves.ease,
+          ('easeInBack') => Curves.easeInBack,
+          ('easeOutBack') => Curves.easeOutBack,
+          ('easeInOutBack') => Curves.easeInOutBack,
+          ('easeInSine') => Curves.easeInSine,
+          ('easeOutSine') => Curves.easeOutSine,
+          ('easeInOutSine') => Curves.easeInOutSine,
+          ('easeInQuad') => Curves.easeInQuad,
+          ('easeOutQuad') => Curves.easeOutQuad,
+          ('easeInOutQuad') => Curves.easeInOutQuad,
+          ('easeInQuart') => Curves.easeInQuart,
+          ('easeOutQuart') => Curves.easeOutQuart,
+          ('easeInOutQuart') => Curves.easeInOutQuart,
+          ('easeInQuint') => Curves.easeInQuint,
+          ('easeOutQuint') => Curves.easeOutQuint,
+          ('easeInOutQuint') => Curves.easeInOutQuint,
+          ('easeInExpo') => Curves.easeInExpo,
+          ('easeOutExpo') => Curves.easeOutExpo,
+          ('linear') => Curves.linear,
           _ => Curves.easeInOut,
         },
         builder: (

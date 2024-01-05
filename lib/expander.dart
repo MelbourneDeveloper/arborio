@@ -106,9 +106,9 @@ class _ExpanderState<T> extends State<Expander<T>>
 
   void _animate() {
     if (widget.isExpanded.value) {
-      _controller.reverse();
-    } else {
       _controller.forward();
+    } else {
+      _controller.reverse();
     }
   }
 
