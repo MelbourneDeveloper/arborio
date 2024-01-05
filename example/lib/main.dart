@@ -235,126 +235,59 @@ class _MyAppState extends State<MyApp> {
               onSelected: (v) => _selectedCurve = v ?? _selectedCurve,
               initialSelection: _selectedCurve,
               dropdownMenuEntries: const [
+                DropdownMenuEntry(value: 'bounceIn', label: 'bounceIn'),
+                DropdownMenuEntry(value: 'bounceInOut', label: 'bounceInOut'),
+                DropdownMenuEntry(value: 'bounceOut', label: 'bounceOut'),
+                DropdownMenuEntry(value: 'ease', label: 'ease'),
+                DropdownMenuEntry(value: 'easeIn', label: 'easeIn'),
+                DropdownMenuEntry(value: 'easeInBack', label: 'easeInBack'),
+                DropdownMenuEntry(value: 'easeInCirc', label: 'easeInCirc'),
+                DropdownMenuEntry(value: 'easeInExpo', label: 'easeInExpo'),
+                DropdownMenuEntry(value: 'easeInOut', label: 'easeInOut'),
                 DropdownMenuEntry(
-                  value: 'easeInOut',
-                  label: 'easeInOut',
+                  value: 'easeInOutBack',
+                  label: 'easeInOutBack',
                 ),
                 DropdownMenuEntry(
-                  value: 'easeInCirc',
-                  label: 'easeInCirc',
-                ),
-                DropdownMenuEntry(
-                  value: 'easeOutCirc',
-                  label: 'easeOutCirc',
-                ),
-                DropdownMenuEntry(
-                  value: 'elasticInOut',
-                  label: 'elasticInOut',
+                  value: 'easeInOutCirc',
+                  label: 'easeInOutCirc',
                 ),
                 DropdownMenuEntry(
                   value: 'easeInOutExpo',
                   label: 'easeInOutExpo',
                 ),
                 DropdownMenuEntry(
-                  value: 'elasticOut',
-                  label: 'elasticOut',
-                ),
-                DropdownMenuEntry(
-                  value: 'elasticIn',
-                  label: 'elasticIn',
-                ),
-                DropdownMenuEntry(
-                  value: 'easeIn',
-                  label: 'easeIn',
-                ),
-                DropdownMenuEntry(
-                  value: 'ease',
-                  label: 'ease',
-                ),
-                DropdownMenuEntry(
-                  value: 'easeInBack',
-                  label: 'easeInBack',
-                ),
-                DropdownMenuEntry(
-                  value: 'easeOutBack',
-                  label: 'easeOutBack',
-                ),
-                DropdownMenuEntry(
-                  value: 'easeInOutBack',
-                  label: 'easeInOutBack',
-                ),
-                DropdownMenuEntry(
-                  value: 'easeInSine',
-                  label: 'easeInSine',
-                ),
-                DropdownMenuEntry(
-                  value: 'easeOutSine',
-                  label: 'easeOutSine',
-                ),
-                DropdownMenuEntry(
-                  value: 'easeInOutSine',
-                  label: 'easeInOutSine',
-                ),
-                DropdownMenuEntry(
-                  value: 'easeInQuad',
-                  label: 'easeInQuad',
-                ),
-                DropdownMenuEntry(
-                  value: 'easeOutQuad',
-                  label: 'easeOutQuad',
-                ),
-                DropdownMenuEntry(
                   value: 'easeInOutQuad',
                   label: 'easeInOutQuad',
-                ),
-                DropdownMenuEntry(
-                  value: 'easeInQuart',
-                  label: 'easeInQuart',
-                ),
-                DropdownMenuEntry(
-                  value: 'easeOutQuart',
-                  label: 'easeOutQuart',
                 ),
                 DropdownMenuEntry(
                   value: 'easeInOutQuart',
                   label: 'easeInOutQuart',
                 ),
                 DropdownMenuEntry(
-                  value: 'easeInQuint',
-                  label: 'easeInQuint',
-                ),
-                DropdownMenuEntry(
-                  value: 'easeOutQuint',
-                  label: 'easeOutQuint',
-                ),
-                DropdownMenuEntry(
                   value: 'easeInOutQuint',
                   label: 'easeInOutQuint',
                 ),
                 DropdownMenuEntry(
-                  value: 'easeInExpo',
-                  label: 'easeInExpo',
+                  value: 'easeInOutSine',
+                  label: 'easeInOutSine',
                 ),
-                DropdownMenuEntry(
-                  value: 'easeOutExpo',
-                  label: 'easeOutExpo',
-                ),
-                DropdownMenuEntry(
-                  value: 'linear',
-                  label: 'linear',
-                ),
-                DropdownMenuEntry(
-                  value: 'bounceIn',
-                  label: 'bounceIn',
-                ),
-                DropdownMenuEntry(
-                  value: 'bounceInOut',
-                  label: 'bounceInOut',
-                ),
-                DropdownMenuEntry(
-                  value: 'bounceOut',
-                  label: 'bounceOut',
-                ),
+                DropdownMenuEntry(value: 'easeInQuad', label: 'easeInQuad'),
+                DropdownMenuEntry(value: 'easeInQuart', label: 'easeInQuart'),
+                DropdownMenuEntry(value: 'easeInQuint', label: 'easeInQuint'),
+                DropdownMenuEntry(value: 'easeInSine', label: 'easeInSine'),
+                DropdownMenuEntry(value: 'easeOut', label: 'easeOut'),
+                DropdownMenuEntry(value: 'easeOutBack', label: 'easeOutBack'),
+                DropdownMenuEntry(value: 'easeOutCirc', label: 'easeOutCirc'),
+                DropdownMenuEntry(value: 'easeOutExpo', label: 'easeOutExpo'),
+                DropdownMenuEntry(value: 'easeOutQuad', label: 'easeOutQuad'),
+                DropdownMenuEntry(value: 'easeOutQuart', label: 'easeOutQuart'),
+                DropdownMenuEntry(value: 'easeOutQuint', label: 'easeOutQuint'),
+                DropdownMenuEntry(value: 'easeOutSine', label: 'easeOutSine'),
+                DropdownMenuEntry(value: 'elasticIn', label: 'elasticIn'),
+                DropdownMenuEntry(value: 'elasticInOut', label: 'elasticInOut'),
+                DropdownMenuEntry(value: 'elasticOut', label: 'elasticOut'),
+                DropdownMenuEntry(value: 'linear', label: 'linear'),
               ],
             ),
           ],
