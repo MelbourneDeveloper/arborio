@@ -146,7 +146,7 @@ class _TreeViewState<T> extends State<TreeView<T>> {
                   });
                   expansionChanged(node, expanded);
                 },
-                isExpanded: node.isExpanded.value,
+                isExpanded: node.isExpanded,
                 children: node.children
                     .map((childNode) => _buildNode(childNode, expansionChanged))
                     .toList(),

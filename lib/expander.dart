@@ -11,8 +11,8 @@ class Expander<T> extends StatefulWidget {
     required this.builder,
     required this.children,
     required this.onExpansionChanged,
+    required this.isExpanded,
     this.canExpand = true,
-    this.isExpanded = false,
     super.key,
     this.expanderIcon,
     this.animationCurve = Curves.easeInOut,
@@ -21,7 +21,7 @@ class Expander<T> extends StatefulWidget {
 
   final List<Widget> children;
   final ValueChanged<bool> onExpansionChanged;
-  final bool isExpanded;
+  final ValueNotifier<bool> isExpanded;
   final bool canExpand;
   final Widget? expanderIcon;
   final ExpanderItemBuilder builder;
@@ -56,9 +56,17 @@ class _ExpanderState<T> extends State<Expander<T>>
       curve: widget.animationCurve,
     );
 
-    if (widget.isExpanded) {
+    if (widget.isExpanded.value) {
       _controller.value = 1.0;
     }
+
+    widget.isExpanded.addListener(() {
+      if (widget.isExpanded.value) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+    });
   }
 
   @override
@@ -69,12 +77,12 @@ class _ExpanderState<T> extends State<Expander<T>>
 
   void _handleTap() {
     setState(() {
-      if (widget.isExpanded) {
+      if (widget.isExpanded.value) {
         _controller.reverse();
       } else {
         _controller.forward();
       }
-      widget.onExpansionChanged(!widget.isExpanded);
+      widget.onExpansionChanged(!widget.isExpanded.value);
     });
   }
 
@@ -93,7 +101,7 @@ class _ExpanderState<T> extends State<Expander<T>>
                 : null,
             title: widget.builder(
               context,
-              widget.isExpanded,
+              widget.isExpanded.value,
               _sizeFactor,
             ),
           ),
