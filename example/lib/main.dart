@@ -150,7 +150,7 @@ class _MyAppState extends State<MyApp> {
   String _selectedCurve = 'easeInOut';
   int _animationDuration = 500;
   final textEditingController = TextEditingController(text: '500');
-  //TreeNode<FileSystemElement>? _selectedNode;
+  TreeNode<FileSystemElement>? _selectedNode;
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -171,7 +171,7 @@ class _MyAppState extends State<MyApp> {
                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                 child: AppBar(
                   backgroundColor: Colors.black.withOpacity(0.2),
-                  title: const Text('Arborio Sample'),
+                  title: Text(_title()),
                   elevation: 3,
                 ),
               ),
@@ -224,6 +224,9 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       );
+
+  String _title() => 'Arborio Sample${_selectedNode != null ? ' - '
+      '${_selectedNode!.data.name}' : ''}';
 
   Positioned _curveDropDown() => Positioned(
         left: 16,
@@ -329,7 +332,7 @@ class _MyAppState extends State<MyApp> {
       );
 
   TreeView<FileSystemElement> _treeView() => TreeView(
-        //onSelectionChanged: (node) => setState(() => _selectedNode = node),
+        onSelectionChanged: (node) => setState(() => _selectedNode = node),
         key: treeViewKey,
         animationDuration: Duration(milliseconds: _animationDuration),
         animationCurve: switch (_selectedCurve) {
