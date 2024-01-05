@@ -1,7 +1,7 @@
 name: treeview
-description: "A new Flutter project."
-
+description: "A Tree View, but really awesome"
 version: 0.1.0-beta
+repository: https://github.com/MelbourneDeveloper/treeview
 
 environment:
   sdk: '>=3.2.3 <4.0.0'

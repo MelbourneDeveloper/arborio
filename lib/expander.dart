@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 typedef ExpanderItemBuilder = Widget Function(
   BuildContext context,
-  bool isSelected,
-  Animation<double> animationState,
+  bool isExpanded,
+  Animation<double> animationValue,
 );
 
 class Expander<T> extends StatefulWidget {
