@@ -148,6 +148,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final treeViewKey = const TreeViewKey<FileSystemElement>();
   String _selectedCurve = 'easeInOut';
+  int _animationDuration = 500;
+  final textEditingController = TextEditingController(text: '500');
   //TreeNode<FileSystemElement>? _selectedNode;
 
   @override
@@ -192,13 +194,38 @@ class _MyAppState extends State<MyApp> {
                 bottom: 16,
                 child: _buttonRow(),
               ),
-              //const Positioned(bottom: 16, child: TextField()),
+              Positioned(
+                bottom: 16,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: SizedBox(
+                    width: 200,
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        labelText: 'Animation Duration (ms)',
+                      ),
+                      onChanged: (v) {
+                        setState(() {
+                          _animationDuration = int.tryParse(v) ?? 500;
+                        });
+                      },
+                      controller: textEditingController,
+                    ),
+                  ),
+                ),
+              ),
               Positioned(
                 left: 16,
                 bottom: 16,
                 child: Row(
                   children: [
                     DropdownMenu<String>(
+                      hintText: 'Expand Animation Curve',
                       onSelected: (v) => _selectedCurve = v ?? _selectedCurve,
                       initialSelection: _selectedCurve,
                       dropdownMenuEntries: const [
@@ -261,6 +288,7 @@ class _MyAppState extends State<MyApp> {
   TreeView<FileSystemElement> _treeView() => TreeView(
         //onSelectionChanged: (node) => setState(() => _selectedNode = node),
         key: treeViewKey,
+        animationDuration: Duration(milliseconds: _animationDuration),
         animationCurve: switch (_selectedCurve) {
           ('easeInCirc') => Curves.easeInCirc,
           ('easeInOutExpo') => Curves.easeInOutExpo,
