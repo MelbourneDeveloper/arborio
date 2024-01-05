@@ -219,131 +219,145 @@ class _MyAppState extends State<MyApp> {
                   ),
                 ),
               ),
-              Positioned(
-                left: 16,
-                bottom: 16,
-                child: Row(
-                  children: [
-                    DropdownMenu<String>(
-                      label: const Text('Animation Curve'),
-                      onSelected: (v) => _selectedCurve = v ?? _selectedCurve,
-                      initialSelection: _selectedCurve,
-                      dropdownMenuEntries: const [
-                        DropdownMenuEntry(
-                          value: 'easeInOut',
-                          label: 'easeInOut',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeInCirc',
-                          label: 'easeInCirc',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeOutCirc',
-                          label: 'easeOutCirc',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'elasticInOut',
-                          label: 'elasticInOut',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeInOutExpo',
-                          label: 'easeInOutExpo',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'elasticOut',
-                          label: 'elasticOut',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'elasticIn',
-                          label: 'elasticIn',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeIn',
-                          label: 'easeIn',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'ease',
-                          label: 'ease',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeInBack',
-                          label: 'easeInBack',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeOutBack',
-                          label: 'easeOutBack',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeInOutBack',
-                          label: 'easeInOutBack',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeInSine',
-                          label: 'easeInSine',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeOutSine',
-                          label: 'easeOutSine',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeInOutSine',
-                          label: 'easeInOutSine',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeInQuad',
-                          label: 'easeInQuad',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeOutQuad',
-                          label: 'easeOutQuad',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeInOutQuad',
-                          label: 'easeInOutQuad',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeInQuart',
-                          label: 'easeInQuart',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeOutQuart',
-                          label: 'easeOutQuart',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeInOutQuart',
-                          label: 'easeInOutQuart',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeInQuint',
-                          label: 'easeInQuint',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeOutQuint',
-                          label: 'easeOutQuint',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeInOutQuint',
-                          label: 'easeInOutQuint',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeInExpo',
-                          label: 'easeInExpo',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'easeOutExpo',
-                          label: 'easeOutExpo',
-                        ),
-                        DropdownMenuEntry(
-                          value: 'linear',
-                          label: 'linear',
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              _curveDropDown(),
             ],
           ),
+        ),
+      );
+
+  Positioned _curveDropDown() => Positioned(
+        left: 16,
+        bottom: 16,
+        child: Row(
+          children: [
+            DropdownMenu<String>(
+              label: const Text('Animation Curve'),
+              onSelected: (v) => _selectedCurve = v ?? _selectedCurve,
+              initialSelection: _selectedCurve,
+              dropdownMenuEntries: const [
+                DropdownMenuEntry(
+                  value: 'easeInOut',
+                  label: 'easeInOut',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInCirc',
+                  label: 'easeInCirc',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeOutCirc',
+                  label: 'easeOutCirc',
+                ),
+                DropdownMenuEntry(
+                  value: 'elasticInOut',
+                  label: 'elasticInOut',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInOutExpo',
+                  label: 'easeInOutExpo',
+                ),
+                DropdownMenuEntry(
+                  value: 'elasticOut',
+                  label: 'elasticOut',
+                ),
+                DropdownMenuEntry(
+                  value: 'elasticIn',
+                  label: 'elasticIn',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeIn',
+                  label: 'easeIn',
+                ),
+                DropdownMenuEntry(
+                  value: 'ease',
+                  label: 'ease',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInBack',
+                  label: 'easeInBack',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeOutBack',
+                  label: 'easeOutBack',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInOutBack',
+                  label: 'easeInOutBack',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInSine',
+                  label: 'easeInSine',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeOutSine',
+                  label: 'easeOutSine',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInOutSine',
+                  label: 'easeInOutSine',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInQuad',
+                  label: 'easeInQuad',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeOutQuad',
+                  label: 'easeOutQuad',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInOutQuad',
+                  label: 'easeInOutQuad',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInQuart',
+                  label: 'easeInQuart',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeOutQuart',
+                  label: 'easeOutQuart',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInOutQuart',
+                  label: 'easeInOutQuart',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInQuint',
+                  label: 'easeInQuint',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeOutQuint',
+                  label: 'easeOutQuint',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInOutQuint',
+                  label: 'easeInOutQuint',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeInExpo',
+                  label: 'easeInExpo',
+                ),
+                DropdownMenuEntry(
+                  value: 'easeOutExpo',
+                  label: 'easeOutExpo',
+                ),
+                DropdownMenuEntry(
+                  value: 'linear',
+                  label: 'linear',
+                ),
+                DropdownMenuEntry(
+                  value: 'bounceIn',
+                  label: 'bounceIn',
+                ),
+                DropdownMenuEntry(
+                  value: 'bounceInOut',
+                  label: 'bounceInOut',
+                ),
+                DropdownMenuEntry(
+                  value: 'bounceOut',
+                  label: 'bounceOut',
+                ),
+              ],
+            ),
+          ],
         ),
       );
 
@@ -376,7 +390,7 @@ class _MyAppState extends State<MyApp> {
             tooltip: 'Collapse All',
             onPressed: () =>
                 setState(() => treeViewKey.currentState!.collapseAll()),
-            child: const Icon(Icons.close),
+            child: const Icon(Icons.compress),
           ),
         ],
       );
@@ -386,6 +400,9 @@ class _MyAppState extends State<MyApp> {
         key: treeViewKey,
         animationDuration: Duration(milliseconds: _animationDuration),
         animationCurve: switch (_selectedCurve) {
+          ('bounceIn') => Curves.bounceIn,
+          ('bounceInOut') => Curves.bounceInOut,
+          ('bounceOut') => Curves.bounceOut,
           ('easeInCirc') => Curves.easeInCirc,
           ('easeInOutExpo') => Curves.easeInOutExpo,
           ('elasticInOut') => Curves.elasticInOut,
