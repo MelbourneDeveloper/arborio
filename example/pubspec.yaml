@@ -9,7 +9,7 @@ environment:
   sdk: ">=3.2.3 <4.0.0"
 
 dependencies:
-  arbor:
+  arborio:
     path: ..
   cupertino_icons: ^1.0.2
   flutter:

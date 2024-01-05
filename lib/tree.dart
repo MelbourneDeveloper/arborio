@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs
 
-import 'package:arbor/expander.dart';
+import 'package:arborio/expander.dart';
 import 'package:flutter/material.dart';
 
 typedef TreeViewItemBuilder<T> = Widget Function(
