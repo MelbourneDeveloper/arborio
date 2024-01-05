@@ -34,7 +34,7 @@ class Expander<T> extends StatefulWidget {
 
 class _ExpanderState<T> extends State<Expander<T>>
     with TickerProviderStateMixin {
-  AnimationController? _controller;
+  late AnimationController _controller;
   late Animation<double> _iconAnimation;
   late Animation<double> _sizeFactor;
   late ValueNotifier<bool> isExpanded;
@@ -49,39 +49,54 @@ class _ExpanderState<T> extends State<Expander<T>>
   @override
   void didUpdateWidget(Expander<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    isExpanded = widget.isExpanded;
-    initAnimation();
+    _controller.duration = widget.animationDuration;
+
+    _iconAnimation = Tween<double>(begin: 0, end: 0.25).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: widget.animationCurve,
+      ),
+    );
+
+    _sizeFactor = CurvedAnimation(
+      parent: _controller,
+      curve: widget.animationCurve,
+    );
+
+    isExpanded
+      ..removeListener(_animate)
+      ..addListener(_animate);
   }
 
   void initAnimation() {
+    isExpanded.addListener(_animate);
     _controller = AnimationController(
       duration: widget.animationDuration,
       vsync: this,
     );
 
-    isExpanded.addListener(_animate);
     _iconAnimation = Tween<double>(begin: 0, end: 0.25).animate(
       CurvedAnimation(
-        parent: _controller!,
+        parent: _controller,
         curve: widget.animationCurve,
       ),
     );
+
     _sizeFactor = CurvedAnimation(
-      parent: _controller!,
+      parent: _controller,
       curve: widget.animationCurve,
     );
 
     if (widget.isExpanded.value) {
-      _controller!.value = 1.0;
+      _controller.value = 1.0;
     }
   }
 
   @override
   void dispose() {
-    super.dispose();
     widget.isExpanded.removeListener(_animate);
-    _controller?.dispose();
-    _controller = null;
+    _controller.dispose();
+    super.dispose();
   }
 
   void _handleTap() {
@@ -91,9 +106,9 @@ class _ExpanderState<T> extends State<Expander<T>>
 
   void _animate() {
     if (widget.isExpanded.value) {
-      _controller?.reverse();
+      _controller.reverse();
     } else {
-      _controller?.forward();
+      _controller.forward();
     }
   }
 
