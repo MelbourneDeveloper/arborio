@@ -1,9 +1,7 @@
 name: treeview
 description: "A new Flutter project."
 
-publish_to: 'none' 
-
-version: 1.0.0+1
+version: 0.1.0-beta
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -19,12 +17,3 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
-
-flutter:
-
-  assets:
-    - assets/
-    - assets/images/
-
-
-  uses-material-design: true
