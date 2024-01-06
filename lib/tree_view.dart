@@ -7,7 +7,7 @@ class TreeViewKey<T> extends GlobalKey<_TreeViewState<T>> {
   const TreeViewKey() : super.constructor();
 }
 
-typedef TreeViewItemBuilder<T> = Widget Function(
+typedef TreeViewBuilder<T> = Widget Function(
   BuildContext context,
   TreeNode<T> node,
   bool isSelected,
@@ -38,13 +38,13 @@ class TreeView<T> extends StatefulWidget {
   const TreeView({
     required this.nodes,
     required this.builder,
+    required this.expanderBuilder,
     ExpansionChanged<T>? onExpansionChanged,
     ValueChanged<TreeNode<T>>? onSelectionChanged,
     this.selectedNode,
     this.indentation = const SizedBox(width: 16),
     super.key,
     this.animationCurve = Curves.easeInOut,
-    this.expanderIcon,
     this.animationDuration = const Duration(milliseconds: 500),
   })  : onExpansionChanged = onExpansionChanged ?? _defaultExpansionChanged,
         onSelectionChanged = onSelectionChanged ?? _defaultSelectionChanged;
@@ -54,8 +54,8 @@ class TreeView<T> extends StatefulWidget {
   final ValueChanged<TreeNode<T>> onSelectionChanged;
   final TreeNode<T>? selectedNode;
   final Widget indentation;
-  final Widget? expanderIcon;
-  final TreeViewItemBuilder<T> builder;
+  final ExpanderContentBuilder expanderBuilder;
+  final TreeViewBuilder<T> builder;
   final Curve animationCurve;
   final Duration animationDuration;
 
@@ -129,10 +129,10 @@ class _TreeViewState<T> extends State<TreeView<T>> {
               child: Expander<T>(
                 animationDuration: widget.animationDuration,
                 animationCurve: widget.animationCurve,
-                expanderIcon: widget.expanderIcon,
+                expanderBuilder: widget.expanderBuilder,
                 canExpand: node.children.isNotEmpty,
                 key: PageStorageKey<Key>(node.key),
-                builder: (context, isExpanded, animationValue) =>
+                contentBuilder: (context, isExpanded, animationValue) =>
                     widget.builder(
                   context,
                   node,
