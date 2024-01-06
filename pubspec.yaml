@@ -4,12 +4,10 @@ version: 0.1.0-beta
 repository: https://github.com/MelbourneDeveloper/treeview
 
 environment:
-  sdk: '>=3.2.3 <4.0.0'
-
+  sdk: ">=3.2.3 <4.0.0"
 
 dependencies:
   cupertino_icons: ^1.0.2
-  flex_color_picker: ^3.3.0
   flutter:
     sdk: flutter
 

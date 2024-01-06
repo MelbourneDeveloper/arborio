@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:arborio/tree_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:path/path.dart' as path;
 
 enum ElementType { file, folder }
@@ -163,16 +164,17 @@ class _MyAppState extends State<MyApp> {
   int _animationDuration = 500;
   final textEditingController = TextEditingController(text: '500');
   TreeNode<FileSystemElement>? _selectedNode;
+  var _seedColor = const Color(0xFF44AD4D);
 
   @override
   Widget build(BuildContext context) => MaterialApp(
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF44AD4D)),
+          colorScheme: ColorScheme.fromSeed(seedColor: _seedColor),
         ),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          backgroundColor: const Color(0xFFFEFCE5),
+          backgroundColor: Theme.of(context).colorScheme.background,
           appBar: PreferredSize(
             preferredSize: const Size(
               double.infinity,
@@ -216,13 +218,23 @@ class _MyAppState extends State<MyApp> {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: Container(
-            height: 90,
+            height: 200,
             color: Colors.black.withOpacity(.1),
             width: double.infinity,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _durationField(),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: ColorPicker(
+                    pickerColor: _seedColor,
+                    onColorChanged: (pickedColor) => setState(() {
+                      _seedColor = pickedColor;
+                    }),
+                    pickerAreaHeightPercent: 0.8,
+                  ),
+                ),
                 _dropDownsRow(),
                 _buttonRow(),
               ],
