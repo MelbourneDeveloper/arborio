@@ -195,7 +195,7 @@ class _MyAppState extends State<MyApp> {
                 opacity: .025,
                 child: Image.asset(
                   'assets/images/arborio_transparent.png',
-                  fit: BoxFit.cover,
+                  fit: BoxFit.scaleDown,
                   width: double.infinity,
                   height: double.infinity,
                 ),
@@ -219,13 +219,18 @@ class _MyAppState extends State<MyApp> {
             height: 90,
             color: Colors.black.withOpacity(.1),
             width: double.infinity,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _durationField(),
-                _dropDownsRow(),
-                _buttonRow(),
-              ],
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  const SizedBox(width: 16),
+                  _durationField(),
+                  const SizedBox(width: 16),
+                  _dropDownsRow(),
+                  const SizedBox(width: 16),
+                  _buttonRow(),
+                ],
+              ),
             ),
           ),
         ),
