@@ -23,10 +23,13 @@ void main() {
     expect(find.text('Music'), findsOneWidget);
     expect(find.text('Photos'), findsOneWidget);
 
-    // await expectLater(
-    //   find.byType(MyApp),
-    //   matchesGoldenFile('goldens/initial-items.png'),
-    // );
+    //TODO: Fix
+    await tester.pumpAndSettle();
+
+    await expectLater(
+      find.byType(MyApp),
+      matchesGoldenFile('goldens/initial.png'),
+    );
 
     await tester.pump(const Duration(seconds: 1));
   });
@@ -42,13 +45,20 @@ void main() {
 
     // Tap on a node to expand it
     await tester.tap(find.text('Projects'));
+    await tester.pump(const Duration(seconds: 1));
     await tester.pumpAndSettle(); // Wait for animations to settle
 
     // Verify that the node expanded
     expect(find.text('FlutterApp'), findsOneWidget);
 
+    await expectLater(
+      find.byType(MyApp),
+      matchesGoldenFile('goldens/projects-expanded.png'),
+    );
+
     // Tap again to collapse
     await tester.tap(find.text('Projects'));
+    await tester.pump(const Duration(seconds: 1));
     await tester.pumpAndSettle(); // Wait for animations to settle
 
     // Verify that the node collapsed
@@ -56,7 +66,25 @@ void main() {
 
     await expectLater(
       find.byType(MyApp),
-      matchesGoldenFile('goldens/expanded.png'),
+      matchesGoldenFile('goldens/projects-collapsed.png'),
+    );
+
+    await tester.tap(find.byIcon(Icons.expand));
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pumpAndSettle();
+
+    await expectLater(
+      find.byType(MyApp),
+      matchesGoldenFile('goldens/expanded-all.png'),
+    );
+
+    await tester.tap(find.byIcon(Icons.compress));
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pumpAndSettle();
+
+    await expectLater(
+      find.byType(MyApp),
+      matchesGoldenFile('goldens/collapsed-all.png'),
     );
 
     await tester.pump(const Duration(seconds: 1));
