@@ -135,6 +135,8 @@ List<TreeNode<FileSystemElement>> fileTree = [
 
 const defaultExpander = Icon(Icons.chevron_right);
 
+const arrowRight = Icon(Icons.arrow_right);
+
 const fingerPointer = Text(
   '👉',
   style: TextStyle(fontSize: 16),
@@ -201,29 +203,28 @@ class _MyAppState extends State<MyApp> {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: ClipRRect(
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: Container(
-                        height: 90,
-                        color: Colors.black.withOpacity(.1),
-                        width: double.infinity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            _durationField(),
-                            _dropDownsRow(),
-                            _buttonRow(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                child: _bottomPane(),
               ),
             ],
+          ),
+        ),
+      );
+
+  ClipRRect _bottomPane() => ClipRRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+          child: Container(
+            height: 90,
+            color: Colors.black.withOpacity(.1),
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _durationField(),
+                _dropDownsRow(),
+                _buttonRow(),
+              ],
+            ),
           ),
         ),
       );
@@ -263,6 +264,10 @@ class _MyAppState extends State<MyApp> {
               DropdownMenuEntry(
                 value: defaultExpander,
                 label: 'Chevron Right Icon',
+              ),
+              DropdownMenuEntry(
+                value: arrowRight,
+                label: 'Arrow Right',
               ),
             ],
           ),
