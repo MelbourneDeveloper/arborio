@@ -1,5 +1,5 @@
-name: example
-description: "A new Flutter project."
+name: arborio_sample
+description: "Arborio Sample App"
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 

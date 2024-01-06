@@ -54,7 +54,7 @@ class TreeView<T> extends StatefulWidget {
   final ValueChanged<TreeNode<T>> onSelectionChanged;
   final TreeNode<T>? selectedNode;
   final Widget indentation;
-  final ExpanderContentBuilder expanderBuilder;
+  final ExpanderBuilder expanderBuilder;
   final TreeViewBuilder<T> builder;
   final Curve animationCurve;
   final Duration animationDuration;

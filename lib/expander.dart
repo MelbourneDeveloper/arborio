@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
-typedef ExpanderContentBuilder = Widget Function(
+///The callback for building the expander or the content of the expander
+typedef ExpanderBuilder = Widget Function(
   BuildContext context,
   bool isExpanded,
   Animation<double> animation,
 );
 
+///Basic animated expander widget that can be used to expand/collapse a list of items
 class Expander<T> extends StatefulWidget {
+  ///Creates an expander widget
   const Expander({
     required this.contentBuilder,
     required this.children,
@@ -19,13 +22,28 @@ class Expander<T> extends StatefulWidget {
     this.animationDuration = const Duration(milliseconds: 500),
   });
 
+  ///The children for this expander
   final List<Widget> children;
+
+  ///Called when the expander is expanded or collapsed
   final ValueChanged<bool> onExpansionChanged;
+
+  ///The state of the expander
   final ValueNotifier<bool> isExpanded;
+
+  ///Whether or not the expander can be expanded (has an expander icon)
   final bool canExpand;
-  final ExpanderContentBuilder expanderBuilder;
-  final ExpanderContentBuilder contentBuilder;
+
+  ///The builder for the expander icon (usually an arrow icon or similar)
+  final ExpanderBuilder expanderBuilder;
+
+  ///The builder for the content of the expander (usually icon and text)
+  final ExpanderBuilder contentBuilder;
+
+  ///This modulates the animation for the expander when it opens and closes
   final Curve animationCurve;
+
+  ///The duration of the animation for the expander when it opens and closes
   final Duration animationDuration;
 
   @override
