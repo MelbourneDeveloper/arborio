@@ -16,122 +16,122 @@ class FileSystemElement {
 }
 
 // Initialize your tree nodes with FileSystemElement type
-List<TreeNode<FileSystemElement>> fileTree = [
-  TreeNode<FileSystemElement>(
-    const Key('Projects'),
-    FileSystemElement('Projects', ElementType.folder),
-    [
+List<TreeNode<FileSystemElement>> fileTree() => [
       TreeNode<FileSystemElement>(
-        const Key('FlutterApp'),
-        FileSystemElement('FlutterApp', ElementType.folder),
+        const Key('Projects'),
+        FileSystemElement('Projects', ElementType.folder),
         [
           TreeNode<FileSystemElement>(
-            const Key('lib'),
-            FileSystemElement('lib', ElementType.folder),
+            const Key('FlutterApp'),
+            FileSystemElement('FlutterApp', ElementType.folder),
             [
               TreeNode<FileSystemElement>(
-                const Key('main.dart'),
-                FileSystemElement('main.dart', ElementType.file),
+                const Key('lib'),
+                FileSystemElement('lib', ElementType.folder),
+                [
+                  TreeNode<FileSystemElement>(
+                    const Key('main.dart'),
+                    FileSystemElement('main.dart', ElementType.file),
+                  ),
+                  TreeNode<FileSystemElement>(
+                    const Key('app.dart'),
+                    FileSystemElement('app.dart', ElementType.file),
+                  ),
+                ],
               ),
               TreeNode<FileSystemElement>(
-                const Key('app.dart'),
-                FileSystemElement('app.dart', ElementType.file),
+                const Key('assets'),
+                FileSystemElement('assets', ElementType.folder),
+                [
+                  TreeNode<FileSystemElement>(
+                    const Key('logo.png'),
+                    FileSystemElement('logo.png', ElementType.file),
+                  ),
+                  TreeNode<FileSystemElement>(
+                    const Key('data.json'),
+                    FileSystemElement('data.json', ElementType.file),
+                  ),
+                ],
               ),
             ],
           ),
           TreeNode<FileSystemElement>(
-            const Key('assets'),
-            FileSystemElement('assets', ElementType.folder),
+            const Key('PythonScripts'),
+            FileSystemElement('PythonScripts', ElementType.folder),
             [
               TreeNode<FileSystemElement>(
-                const Key('logo.png'),
-                FileSystemElement('logo.png', ElementType.file),
-              ),
-              TreeNode<FileSystemElement>(
-                const Key('data.json'),
-                FileSystemElement('data.json', ElementType.file),
+                const Key('script.py'),
+                FileSystemElement('script.py', ElementType.file),
               ),
             ],
           ),
         ],
       ),
       TreeNode<FileSystemElement>(
-        const Key('PythonScripts'),
-        FileSystemElement('PythonScripts', ElementType.folder),
+        const Key('Documents'),
+        FileSystemElement('Documents', ElementType.folder),
         [
           TreeNode<FileSystemElement>(
-            const Key('script.py'),
-            FileSystemElement('script.py', ElementType.file),
-          ),
-        ],
-      ),
-    ],
-  ),
-  TreeNode<FileSystemElement>(
-    const Key('Documents'),
-    FileSystemElement('Documents', ElementType.folder),
-    [
-      TreeNode<FileSystemElement>(
-        const Key('Resume.docx'),
-        FileSystemElement('Resume.docx', ElementType.file),
-      ),
-      TreeNode<FileSystemElement>(
-        const Key('Budget.xlsx'),
-        FileSystemElement('Budget.xlsx', ElementType.file),
-      ),
-    ],
-  ),
-  TreeNode<FileSystemElement>(
-    const Key('Music'),
-    FileSystemElement('Music', ElementType.folder),
-    [
-      TreeNode<FileSystemElement>(
-        const Key('Favorites'),
-        FileSystemElement('Favorites', ElementType.folder),
-        [
-          TreeNode<FileSystemElement>(
-            const Key('song1.mp3'),
-            FileSystemElement('song1.mp3', ElementType.file),
+            const Key('Resume.docx'),
+            FileSystemElement('Resume.docx', ElementType.file),
           ),
           TreeNode<FileSystemElement>(
-            const Key('song2.mp3'),
-            FileSystemElement('song2.mp3', ElementType.file),
-          ),
-        ],
-      ),
-    ],
-  ),
-  TreeNode<FileSystemElement>(
-    const Key('Photos'),
-    FileSystemElement('Photos', ElementType.folder),
-    [
-      TreeNode<FileSystemElement>(
-        const Key('Vacation'),
-        FileSystemElement('Vacation', ElementType.folder),
-        [
-          TreeNode<FileSystemElement>(
-            const Key('image1.jpg'),
-            FileSystemElement('image1.jpg', ElementType.file),
-          ),
-          TreeNode<FileSystemElement>(
-            const Key('image2.jpg'),
-            FileSystemElement('image2.jpg', ElementType.file),
+            const Key('Budget.xlsx'),
+            FileSystemElement('Budget.xlsx', ElementType.file),
           ),
         ],
       ),
       TreeNode<FileSystemElement>(
-        const Key('Family'),
-        FileSystemElement('Family', ElementType.folder),
+        const Key('Music'),
+        FileSystemElement('Music', ElementType.folder),
         [
           TreeNode<FileSystemElement>(
-            const Key('photo1.jpg'),
-            FileSystemElement('photo1.jpg', ElementType.file),
+            const Key('Favorites'),
+            FileSystemElement('Favorites', ElementType.folder),
+            [
+              TreeNode<FileSystemElement>(
+                const Key('song1.mp3'),
+                FileSystemElement('song1.mp3', ElementType.file),
+              ),
+              TreeNode<FileSystemElement>(
+                const Key('song2.mp3'),
+                FileSystemElement('song2.mp3', ElementType.file),
+              ),
+            ],
           ),
         ],
       ),
-    ],
-  ),
-];
+      TreeNode<FileSystemElement>(
+        const Key('Photos'),
+        FileSystemElement('Photos', ElementType.folder),
+        [
+          TreeNode<FileSystemElement>(
+            const Key('Vacation'),
+            FileSystemElement('Vacation', ElementType.folder),
+            [
+              TreeNode<FileSystemElement>(
+                const Key('image1.jpg'),
+                FileSystemElement('image1.jpg', ElementType.file),
+              ),
+              TreeNode<FileSystemElement>(
+                const Key('image2.jpg'),
+                FileSystemElement('image2.jpg', ElementType.file),
+              ),
+            ],
+          ),
+          TreeNode<FileSystemElement>(
+            const Key('Family'),
+            FileSystemElement('Family', ElementType.folder),
+            [
+              TreeNode<FileSystemElement>(
+                const Key('photo1.jpg'),
+                FileSystemElement('photo1.jpg', ElementType.file),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ];
 
 const defaultExpander = Icon(Icons.chevron_right);
 
@@ -163,6 +163,7 @@ class _MyAppState extends State<MyApp> {
   int _animationDuration = 500;
   final textEditingController = TextEditingController(text: '500');
   TreeNode<FileSystemElement>? _selectedNode;
+  final List<TreeNode<FileSystemElement>> _fileTree = fileTree();
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -351,7 +352,7 @@ class _MyAppState extends State<MyApp> {
           FloatingActionButton(
             tooltip: 'Add',
             onPressed: () => setState(
-              () => fileTree.add(
+              () => _fileTree.add(
                 TreeNode(
                   const Key('newnode'),
                   FileSystemElement(
@@ -488,7 +489,7 @@ class _MyAppState extends State<MyApp> {
               ],
             ),
         },
-        nodes: fileTree,
+        nodes: _fileTree,
         expanderBuilder: (context, node, animationValue) => RotationTransition(
           turns: animationValue,
           child: _expander,

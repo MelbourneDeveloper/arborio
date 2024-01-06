@@ -1,4 +1,3 @@
-
 import 'package:arborio/expander.dart';
 import 'package:flutter/material.dart';
 
@@ -33,12 +32,16 @@ class TreeNode<T> {
     bool isExpanded = false,
   ])  : children = children ?? <TreeNode<T>>[],
         isExpanded = ValueNotifier(isExpanded);
+
   ///The unique key for this node
   final Key key;
+
   ///The data for this node
   final T data;
+
   ///The children of this node
   final List<TreeNode<T>> children;
+
   ///Whether or not this node is expanded. Changing this value will cause the
   ///node's expander to animate open or closed
   ValueNotifier<bool> isExpanded;
@@ -104,11 +107,7 @@ class _TreeViewState<T> extends State<TreeView<T>> {
 
   void _listen(TreeNode<T> node) {
     node.children.forEach(_listen);
-    node.isExpanded.addListener(() {
-      // ignore: avoid_print
-      print('asd');
-      setState(() {});
-    });
+    node.isExpanded.addListener(() => setState(() {}));
   }
 
   void collapseAll() => setState(() {
