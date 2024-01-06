@@ -38,7 +38,7 @@ class TreeView<T> extends StatefulWidget {
   const TreeView({
     required this.nodes,
     required this.builder,
-    required this.expanderIcon,
+    required this.expanderBuilder,
     ExpansionChanged<T>? onExpansionChanged,
     ValueChanged<TreeNode<T>>? onSelectionChanged,
     this.selectedNode,
@@ -54,7 +54,7 @@ class TreeView<T> extends StatefulWidget {
   final ValueChanged<TreeNode<T>> onSelectionChanged;
   final TreeNode<T>? selectedNode;
   final Widget indentation;
-  final ExpanderContentBuilder expanderIcon;
+  final ExpanderContentBuilder expanderBuilder;
   final TreeViewBuilder<T> builder;
   final Curve animationCurve;
   final Duration animationDuration;
@@ -129,11 +129,7 @@ class _TreeViewState<T> extends State<TreeView<T>> {
               child: Expander<T>(
                 animationDuration: widget.animationDuration,
                 animationCurve: widget.animationCurve,
-                expanderBuilder: (context, node, animatedValue) =>
-                    RotationTransition(
-                  turns: animatedValue,
-                  child: widget.expanderIcon(context, node, animatedValue),
-                ),
+                expanderBuilder: widget.expanderBuilder,
                 canExpand: node.children.isNotEmpty,
                 key: PageStorageKey<Key>(node.key),
                 contentBuilder: (context, isExpanded, animationValue) =>
