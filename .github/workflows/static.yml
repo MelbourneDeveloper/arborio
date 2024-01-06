@@ -25,30 +25,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      # Set up Flutter environment
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.0.5' # Specify the Flutter version
-          channel: 'stable' # Specify the Flutter channel
+          flutter-version: ${{ vars.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
+          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:"
+          architecture: x64
 
-      # Build the Flutter web app
       - name: Build Flutter Web App
         run: |
           flutter pub get
           flutter build web --release
 
-      # Setup Pages
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
-      # Upload artifact from the build directory
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './example/build/web' # Ensure this is the path to the build output
 
-      # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
