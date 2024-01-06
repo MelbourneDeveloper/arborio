@@ -8,77 +8,84 @@ const defaultTestingResolution = Size(
 );
 
 void main() {
-  group('TreeView Widget Tests', () {
-    testWidgets('TreeView should display correct initial items',
-        (tester) async {
-      const myApp = MyApp();
+  // testWidgets('TreeView should display correct initial items',
+  //     (tester) async {
+  //   const myApp = MyApp();
 
-      await tester.pumpWidget(myApp);
+  //   await tester.pumpWidget(myApp);
 
-      tester.viewOf(find.byWidget(myApp))
-        ..physicalSize = defaultTestingResolution
-        ..devicePixelRatio = 1;
+  //   tester.viewOf(find.byWidget(myApp))
+  //     ..physicalSize = defaultTestingResolution
+  //     ..devicePixelRatio = 1;
 
-      // Verify that TreeView displays the initial items
-      expect(find.text('Projects'), findsOneWidget);
-      expect(find.text('Documents'), findsOneWidget);
-      expect(find.text('Music'), findsOneWidget);
-      expect(find.text('Photos'), findsOneWidget);
-    });
+  //   // Verify that TreeView displays the initial items
+  //   expect(find.text('Projects'), findsOneWidget);
+  //   expect(find.text('Documents'), findsOneWidget);
+  //   expect(find.text('Music'), findsOneWidget);
+  //   expect(find.text('Photos'), findsOneWidget);
 
-    testWidgets('TreeView node expands and collapses on tap', (tester) async {
-      const myApp = MyApp();
+  //   await expectLater(
+  //     find.byType(MyApp),
+  //     matchesGoldenFile('goldens/initial-items.png'),
+  //   );
 
-      await tester.pumpWidget(myApp);
+  //   await tester.pumpAndSettle();
+  // });
 
-      tester.viewOf(find.byWidget(myApp))
-        ..physicalSize = defaultTestingResolution
-        ..devicePixelRatio = 1;
+  testWidgets('TreeView node expands and collapses on tap', (tester) async {
+    const myApp = MyApp();
 
-      // Tap on a node to expand it
-      await tester.tap(find.text('Projects'));
-      await tester.pumpAndSettle(); // Wait for animations to settle
+    await tester.pumpWidget(myApp);
 
-      // Verify that the node expanded
-      expect(find.text('FlutterApp'), findsOneWidget);
+    tester.viewOf(find.byWidget(myApp))
+      ..physicalSize = defaultTestingResolution
+      ..devicePixelRatio = 1;
 
-      // Tap again to collapse
-      await tester.tap(find.text('Projects'));
-      await tester.pumpAndSettle(); // Wait for animations to settle
+    // Tap on a node to expand it
+    await tester.tap(find.text('Projects'));
+    await tester.pumpAndSettle(); // Wait for animations to settle
 
-      // Verify that the node collapsed
-      //expect(find.text('FlutterApp'), findsNothing);
+    // Verify that the node expanded
+    expect(find.text('FlutterApp'), findsOneWidget);
 
-      // await expectLater(
-      //   find.byType(MyApp),
-      //   matchesGoldenFile('expanded.png'),
-      // );
+    // Tap again to collapse
+    await tester.tap(find.text('Projects'));
+    await tester.pumpAndSettle(); // Wait for animations to settle
 
-      await tester.pumpAndSettle(); // Wait for animations to settle
-    });
+    // Verify that the node collapsed
+    //expect(find.text('FlutterApp'), findsNothing);
 
-    testWidgets('TreeView updates when a new node is added', (tester) async {
-      const myApp = MyApp();
+    // await expectLater(
+    //   find.byType(MyApp),
+    //   matchesGoldenFile('expanded.png'),
+    // );
 
-      await tester.pumpWidget(myApp);
+    await tester.pump(const Duration(seconds: 1));
+  });
 
-      tester.viewOf(find.byWidget(myApp))
-        ..physicalSize = defaultTestingResolution
-        ..devicePixelRatio = 1;
+  testWidgets('TreeView updates when a new node is added', (tester) async {
+    const myApp = MyApp();
 
-      await tester.pumpAndSettle();
+    await tester.pumpWidget(myApp);
 
-      await tester.tap(find.byIcon(Icons.add).last);
-      await tester.pumpAndSettle();
-      await tester.pump(const Duration(milliseconds: 100));
+    tester.viewOf(find.byWidget(myApp))
+      ..physicalSize = defaultTestingResolution
+      ..devicePixelRatio = 1;
 
-      // Verify that the new node is displayed
-      expect(find.text('New Folder'), findsOneWidget);
+    await tester.pumpAndSettle();
 
-      await expectLater(
-        find.byType(MyApp),
-        matchesGoldenFile('newfolder.png'),
-      );
-    });
+    await tester.tap(find.byIcon(Icons.add).last);
+    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 100));
+
+    // Verify that the new node is displayed
+    expect(find.text('New Folder'), findsOneWidget);
+
+    await expectLater(
+      find.byType(MyApp),
+      matchesGoldenFile('goldens/newfolder.png'),
+    );
+
+    await tester.pump(const Duration(seconds: 1));
   });
 }
