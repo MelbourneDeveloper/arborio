@@ -37,7 +37,7 @@ jobs:
         run: |
           cd example
           flutter pub get
-          flutter build web --release
+          flutter build web --release --base-href /arborio/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
