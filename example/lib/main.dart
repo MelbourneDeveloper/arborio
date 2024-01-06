@@ -137,6 +137,8 @@ const defaultExpander = Icon(Icons.chevron_right);
 
 const arrowRight = Icon(Icons.arrow_right);
 
+const doubleArrow = Icon(Icons.double_arrow);
+
 const fingerPointer = Text(
   '👉',
   style: TextStyle(fontSize: 16),
@@ -268,6 +270,10 @@ class _MyAppState extends State<MyApp> {
               DropdownMenuEntry(
                 value: arrowRight,
                 label: 'Arrow Right',
+              ),
+              DropdownMenuEntry(
+                value: doubleArrow,
+                label: 'Double Arrow',
               ),
             ],
           ),
