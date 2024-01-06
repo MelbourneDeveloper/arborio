@@ -1,12 +1,14 @@
-// ignore_for_file: public_member_api_docs
 
 import 'package:arborio/expander.dart';
 import 'package:flutter/material.dart';
 
+///[GlobalKey] for controlling the state of the [TreeView]
 class TreeViewKey<T> extends GlobalKey<_TreeViewState<T>> {
+  ///Creates a [GlobalKey] for controlling the state of the [TreeView]
   const TreeViewKey() : super.constructor();
 }
 
+///The callback function for building tree nodes, including animation values
 typedef TreeViewBuilder<T> = Widget Function(
   BuildContext context,
   TreeNode<T> node,
@@ -15,12 +17,15 @@ typedef TreeViewBuilder<T> = Widget Function(
   void Function(TreeNode<T> node) select,
 );
 
+///The callback function when the node expands or collapses
 typedef ExpansionChanged<T> = void Function(TreeNode<T> node, bool expanded);
 
 void _defaultExpansionChanged<T>(TreeNode<T> node, bool expanded) {}
 void _defaultSelectionChanged<T>(TreeNode<T> node) {}
 
+///Represents a tree node in the [TreeView]
 class TreeNode<T> {
+  ///Creates a tree node
   TreeNode(
     this.key,
     this.data, [
@@ -28,13 +33,20 @@ class TreeNode<T> {
     bool isExpanded = false,
   ])  : children = children ?? <TreeNode<T>>[],
         isExpanded = ValueNotifier(isExpanded);
+  ///The unique key for this node
   final Key key;
+  ///The data for this node
   final T data;
+  ///The children of this node
   final List<TreeNode<T>> children;
+  ///Whether or not this node is expanded. Changing this value will cause the
+  ///node's expander to animate open or closed
   ValueNotifier<bool> isExpanded;
 }
 
+///A tree view widget that for displaying data hierarchically
 class TreeView<T> extends StatefulWidget {
+  ///Creates a [TreeView] widget
   const TreeView({
     required this.nodes,
     required this.builder,
@@ -49,14 +61,31 @@ class TreeView<T> extends StatefulWidget {
   })  : onExpansionChanged = onExpansionChanged ?? _defaultExpansionChanged,
         onSelectionChanged = onSelectionChanged ?? _defaultSelectionChanged;
 
+  ///The root nodes for this tree view, which can have children
   final List<TreeNode<T>> nodes;
+
+  ///Called when a node is expanded or collapsed
   final ExpansionChanged<T> onExpansionChanged;
+
+  ///Called when the selected node changes
   final ValueChanged<TreeNode<T>> onSelectionChanged;
+
+  ///The currently selected node
   final TreeNode<T>? selectedNode;
+
+  ///The widget to use for indentation of nodes
   final Widget indentation;
+
+  ///The builder for the expander icon (usually an arrow icon or similar)
   final ExpanderBuilder expanderBuilder;
+
+  ///The builder for the content of the expander (usually icon and text)
   final TreeViewBuilder<T> builder;
+
+  ///This modulates the animation for the expander when it opens and closes
   final Curve animationCurve;
+
+  ///The duration of the animation for the expander when it opens and closes
   final Duration animationDuration;
 
   @override
@@ -70,11 +99,11 @@ class _TreeViewState<T> extends State<TreeView<T>> {
   void initState() {
     super.initState();
     _selectedNode = widget.selectedNode;
-    widget.nodes.forEach(listen);
+    widget.nodes.forEach(_listen);
   }
 
-  void listen(TreeNode<T> node) {
-    node.children.forEach(listen);
+  void _listen(TreeNode<T> node) {
+    node.children.forEach(_listen);
     node.isExpanded.addListener(() {
       // ignore: avoid_print
       print('asd');
