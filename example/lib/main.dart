@@ -202,33 +202,35 @@ class _MyAppState extends State<MyApp> {
                 bottom: 16,
                 child: _buttonRow(),
               ),
-              Positioned(
-                bottom: 16,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: SizedBox(
-                    width: 200,
-                    child: TextField(
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        labelText: 'Animation Duration (ms)',
-                      ),
-                      onChanged: (v) {
-                        setState(() {
-                          _animationDuration = int.tryParse(v) ?? 500;
-                        });
-                      },
-                      controller: textEditingController,
-                    ),
-                  ),
-                ),
-              ),
+              _durationField(),
               _dropDownsRow(),
             ],
+          ),
+        ),
+      );
+
+  Positioned _durationField() => Positioned(
+        bottom: 16,
+        left: 0,
+        right: 0,
+        child: Center(
+          child: SizedBox(
+            width: 200,
+            child: TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                labelText: 'Animation Duration (ms)',
+              ),
+              onChanged: (v) {
+                setState(() {
+                  _animationDuration = int.tryParse(v) ?? 500;
+                });
+              },
+              controller: textEditingController,
+            ),
           ),
         ),
       );
@@ -247,7 +249,10 @@ class _MyAppState extends State<MyApp> {
               initialSelection: _expander,
               dropdownMenuEntries: const [
                 DropdownMenuEntry(value: fingerPointer, label: '👉'),
-                DropdownMenuEntry(value: defaultExpander, label: '>'),
+                DropdownMenuEntry(
+                  value: defaultExpander,
+                  label: 'Chevron Right Icon',
+                ),
               ],
             ),
             const SizedBox(width: 16),
