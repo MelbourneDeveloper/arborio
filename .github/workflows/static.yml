@@ -35,6 +35,7 @@ jobs:
 
       - name: Build Flutter Web App
         run: |
+          cd example
           flutter pub get
           flutter build web --release
 
