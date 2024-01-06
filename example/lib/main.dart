@@ -440,9 +440,12 @@ class _MyAppState extends State<MyApp> {
             ),
         },
         nodes: fileTree,
-        expanderIcon: Text(
-          '👉',
-          style: Theme.of(context).textTheme.headlineLarge,
+        expanderIcon: (context, node, animationValue) => RotationTransition(
+          turns: animationValue,
+          child: Text(
+            '👉',
+            style: Theme.of(context).textTheme.headlineLarge,
+          ),
         ),
       );
 }
