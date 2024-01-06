@@ -133,6 +133,13 @@ List<TreeNode<FileSystemElement>> fileTree = [
   ),
 ];
 
+const defaultExpander = Icon(Icons.chevron_right);
+
+const fingerPointer = Text(
+  '👉',
+  style: TextStyle(fontSize: 16),
+);
+
 // The main app widget
 void main() {
   runApp(const MyApp());
@@ -148,6 +155,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final treeViewKey = const TreeViewKey<FileSystemElement>();
   String _selectedCurve = 'easeInOut';
+  Widget _expander = defaultExpander;
   int _animationDuration = 500;
   final textEditingController = TextEditingController(text: '500');
   TreeNode<FileSystemElement>? _selectedNode;
@@ -219,7 +227,7 @@ class _MyAppState extends State<MyApp> {
                   ),
                 ),
               ),
-              _curveDropDown(),
+              _dropDownsRow(),
             ],
           ),
         ),
@@ -228,11 +236,21 @@ class _MyAppState extends State<MyApp> {
   String _title() => 'Arborio Sample${_selectedNode != null ? ' - '
       '${_selectedNode!.data.name}' : ''}';
 
-  Positioned _curveDropDown() => Positioned(
+  Widget _dropDownsRow() => Positioned(
         left: 16,
         bottom: 16,
         child: Row(
           children: [
+            DropdownMenu<Widget>(
+              label: const Text('Expander'),
+              onSelected: (v) => setState(() => _expander = v ?? _expander),
+              initialSelection: _expander,
+              dropdownMenuEntries: const [
+                DropdownMenuEntry(value: fingerPointer, label: '👉'),
+                DropdownMenuEntry(value: defaultExpander, label: '>'),
+              ],
+            ),
+            const SizedBox(width: 16),
             DropdownMenu<String>(
               label: const Text('Animation Curve'),
               onSelected: (v) => _selectedCurve = v ?? _selectedCurve,
@@ -442,10 +460,7 @@ class _MyAppState extends State<MyApp> {
         nodes: fileTree,
         expanderBuilder: (context, node, animationValue) => RotationTransition(
           turns: animationValue,
-          child: Text(
-            '👉',
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
+          child: _expander,
         ),
       );
 }
