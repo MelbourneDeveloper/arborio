@@ -54,6 +54,7 @@ class TreeView<T> extends StatefulWidget {
     required this.nodes,
     required this.builder,
     required this.expanderBuilder,
+    required this.dragBuilder,
     ExpansionChanged<T>? onExpansionChanged,
     ValueChanged<TreeNode<T>>? onSelectionChanged,
     this.selectedNode,
@@ -81,6 +82,8 @@ class TreeView<T> extends StatefulWidget {
 
   ///The builder for the expander icon (usually an arrow icon or similar)
   final ExpanderBuilder expanderBuilder;
+
+  final Widget Function(BuildContext, TreeNode<T>) dragBuilder;
 
   ///The builder for the content of the expander (usually icon and text)
   final TreeViewBuilder<T> builder;
@@ -138,7 +141,7 @@ class _TreeViewState<T> extends State<TreeView<T>> {
   }
 
   @override
-  Widget build(BuildContext context) => ListView(
+  Widget build(BuildContext context) => Column(
         children: widget.nodes
             .map((node) => _buildNode(node, widget.onExpansionChanged))
             .toList(),
@@ -149,6 +152,7 @@ class _TreeViewState<T> extends State<TreeView<T>> {
     ExpansionChanged<T> expansionChanged,
   ) =>
       Theme(
+        key: node.key,
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: Row(
           children: [
@@ -158,6 +162,7 @@ class _TreeViewState<T> extends State<TreeView<T>> {
                 animationDuration: widget.animationDuration,
                 animationCurve: widget.animationCurve,
                 expanderBuilder: widget.expanderBuilder,
+                dragFeedback: widget.dragBuilder(context, node),
                 canExpand: node.children.isNotEmpty,
                 key: PageStorageKey<Key>(node.key),
                 contentBuilder: (context, isExpanded, animationValue) =>

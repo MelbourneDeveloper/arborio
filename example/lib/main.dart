@@ -494,5 +494,9 @@ class _MyAppState extends State<MyApp> {
           turns: animationValue,
           child: _expander,
         ),
+        dragBuilder: (context, node) => const Icon(
+          Icons.chevron_right_outlined,
+          color: Colors.green,
+        ),
       );
 }

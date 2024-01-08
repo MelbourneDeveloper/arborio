@@ -16,6 +16,7 @@ class Expander<T> extends StatefulWidget {
     required this.onExpansionChanged,
     required this.isExpanded,
     required this.expanderBuilder,
+    required this.dragFeedback,
     this.canExpand = true,
     super.key,
     this.animationCurve = Curves.easeInOut,
@@ -39,6 +40,8 @@ class Expander<T> extends StatefulWidget {
 
   ///The builder for the content of the expander (usually icon and text)
   final ExpanderBuilder contentBuilder;
+
+  final Widget dragFeedback;
 
   ///This modulates the animation for the expander when it opens and closes
   final Curve animationCurve;
@@ -129,19 +132,22 @@ class _ExpanderState<T> extends State<Expander<T>>
   Widget build(BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          ListTile(
-            onTap: _handleTap,
-            leading: widget.canExpand
-                ? widget.expanderBuilder(
-                    context,
-                    widget.isExpanded.value,
-                    _expanderAnimation,
-                  )
-                : null,
-            title: widget.contentBuilder(
-              context,
-              widget.isExpanded.value,
-              _contentAnimation,
+          LongPressDraggable(
+            feedback: widget.dragFeedback,
+            child: ListTile(
+              onTap: _handleTap,
+              leading: widget.canExpand
+                  ? widget.expanderBuilder(
+                      context,
+                      widget.isExpanded.value,
+                      _expanderAnimation,
+                    )
+                  : null,
+              title: widget.contentBuilder(
+                context,
+                widget.isExpanded.value,
+                _contentAnimation,
+              ),
             ),
           ),
           SizeTransition(
