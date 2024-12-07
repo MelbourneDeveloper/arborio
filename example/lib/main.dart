@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 
+import 'package:arborio/expander.dart';
 import 'package:arborio/tree_view.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
@@ -160,6 +161,7 @@ class _MyAppState extends State<MyApp> {
   final treeViewKey = const TreeViewKey<FileSystemElement>();
   String _selectedCurve = 'easeInOut';
   Widget _expander = defaultExpander;
+  HeaderBuilder? _headerBuilder;
   int _animationDuration = 500;
   final textEditingController = TextEditingController(text: '500');
   TreeNode<FileSystemElement>? _selectedNode;
@@ -230,6 +232,8 @@ class _MyAppState extends State<MyApp> {
                   _dropDownsRow(),
                   const SizedBox(width: 16),
                   _buttonRow(),
+                  const SizedBox(width: 16),
+                  _customHeaderSwitch(),
                 ],
               ),
             ),
@@ -260,6 +264,31 @@ class _MyAppState extends State<MyApp> {
 
   String _title() => 'Arborio Sample${_selectedNode != null ? ' - '
       '${_selectedNode!.data.name}' : ''}';
+
+  Widget _customHeaderSwitch() => Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text('Custom Header'),
+          const SizedBox(width: 2),
+          Switch(
+            value: _headerBuilder != null,
+            onChanged: (v) => setState(
+              () => _headerBuilder == null
+                  ? _headerBuilder =
+                      (context, onTap, leading, title) => GestureDetector(
+                            onTap: onTap,
+                            child: Row(
+                              children: [
+                                leading ?? const SizedBox(),
+                                title,
+                              ],
+                            ),
+                          )
+                  : _headerBuilder = null,
+            ),
+          ),
+        ],
+      );
 
   Widget _dropDownsRow() => Row(
         children: [
@@ -418,6 +447,7 @@ class _MyAppState extends State<MyApp> {
           ('linear') => Curves.linear,
           _ => Curves.easeInOut,
         },
+        headerBuilder: _headerBuilder,
         builder: (
           context,
           node,
