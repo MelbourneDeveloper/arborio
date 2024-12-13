@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 /// Callback for building the expander icon or content.
-/// 
+///
 /// Example:
 /// ```dart
 /// Widget buildExpander(BuildContext context, bool isExpanded, Animation<double> animation) {
@@ -20,7 +20,7 @@ typedef ExpanderBuilder = Widget Function(
 );
 
 /// An animated widget that can expand or collapse its children with smooth transitions.
-/// 
+///
 /// Example:
 /// ```dart
 /// Expander<String>(

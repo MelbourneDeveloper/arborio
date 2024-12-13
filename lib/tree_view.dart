@@ -4,7 +4,7 @@ import 'package:arborio/expander.dart';
 import 'package:flutter/material.dart';
 
 /// A [GlobalKey] for controlling the state of the [TreeView].
-/// 
+///
 /// Example:
 /// ```dart
 /// final treeKey = TreeViewKey<String>();
@@ -19,7 +19,7 @@ class TreeViewKey<T> extends GlobalKey<_TreeViewState<T>> {
 }
 
 /// Callback function for building tree nodes, including animation values.
-/// 
+///
 /// Example:
 /// ```dart
 /// Widget buildNode(BuildContext context, TreeNode<String> node, bool isSelected,
@@ -36,7 +36,7 @@ typedef TreeViewBuilder<T> = Widget Function(
 );
 
 /// Callback function when a node expands or collapses.
-/// 
+///
 /// Example:
 /// ```dart
 /// void onExpand(TreeNode<String> node, bool expanded) {
@@ -49,7 +49,7 @@ void _defaultExpansionChanged<T>(TreeNode<T> node, bool expanded) {}
 void _defaultSelectionChanged<T>(TreeNode<T> node) {}
 
 /// Represents a node in the [TreeView] hierarchy.
-/// 
+///
 /// Example:
 /// ```dart
 /// final node = TreeNode<String>(
@@ -91,7 +91,7 @@ class TreeNode<T> {
 }
 
 /// A hierarchical tree view widget for displaying data in a collapsible structure.
-/// 
+///
 /// Example:
 /// ```dart
 /// TreeView<String>(
