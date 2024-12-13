@@ -1,13 +1,32 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:arborio/expander.dart';
 import 'package:flutter/material.dart';
 
-///[GlobalKey] for controlling the state of the [TreeView]
+/// A [GlobalKey] for controlling the state of the [TreeView].
+/// 
+/// Example:
+/// ```dart
+/// final treeKey = TreeViewKey<String>();
+/// TreeView<String>(
+///   key: treeKey,
+///   // ... other parameters
+/// )
+/// ```
 class TreeViewKey<T> extends GlobalKey<_TreeViewState<T>> {
-  ///Creates a [GlobalKey] for controlling the state of the [TreeView]
+  /// Creates a [GlobalKey] for controlling the state of the [TreeView].
   const TreeViewKey() : super.constructor();
 }
 
-///The callback function for building tree nodes, including animation values
+/// Callback function for building tree nodes, including animation values.
+/// 
+/// Example:
+/// ```dart
+/// Widget buildNode(BuildContext context, TreeNode<String> node, bool isSelected,
+///     Animation<double> expansionAnimation, Function(TreeNode<String>) select) {
+///   return Text(node.data);
+/// }
+/// ```
 typedef TreeViewBuilder<T> = Widget Function(
   BuildContext context,
   TreeNode<T> node,
@@ -16,40 +35,79 @@ typedef TreeViewBuilder<T> = Widget Function(
   void Function(TreeNode<T> node) select,
 );
 
-///The callback function when the node expands or collapses
+/// Callback function when a node expands or collapses.
+/// 
+/// Example:
+/// ```dart
+/// void onExpand(TreeNode<String> node, bool expanded) {
+///   print('Node ${node.data} is now ${expanded ? 'expanded' : 'collapsed'}');
+/// }
+/// ```
 typedef ExpansionChanged<T> = void Function(TreeNode<T> node, bool expanded);
 
 void _defaultExpansionChanged<T>(TreeNode<T> node, bool expanded) {}
 void _defaultSelectionChanged<T>(TreeNode<T> node) {}
 
-///Represents a tree node in the [TreeView]
+/// Represents a node in the [TreeView] hierarchy.
+/// 
+/// Example:
+/// ```dart
+/// final node = TreeNode<String>(
+///   ValueKey('root'),
+///   'Root Node',
+///   [
+///     TreeNode<String>(ValueKey('child1'), 'Child 1'),
+///     TreeNode<String>(ValueKey('child2'), 'Child 2'),
+///   ],
+///   true, // initially expanded
+/// );
+/// ```
 class TreeNode<T> {
-  ///Creates a tree node
+  /// Creates a tree node with the specified [key], [data], optional [children],
+  /// and initial expansion state.
   TreeNode(
     this.key,
     this.data, [
     List<TreeNode<T>>? children,
     bool isExpanded = false,
   ])  : children = children ?? <TreeNode<T>>[],
-        isExpanded = ValueNotifier(isExpanded);
+        _isExpanded = ValueNotifier(isExpanded);
 
-  ///The unique key for this node
+  /// The unique key for this node.
   final Key key;
 
-  ///The data for this node
+  /// The data associated with this node.
   final T data;
 
-  ///The children of this node
+  /// The child nodes of this node.
   final List<TreeNode<T>> children;
 
-  ///Whether or not this node is expanded. Changing this value will cause the
-  ///node's expander to animate open or closed
-  ValueNotifier<bool> isExpanded;
+  /// Controls the expansion state of this node.
+  /// When modified, the node's expander will animate open or closed.
+  final ValueNotifier<bool> _isExpanded;
+
+  /// Gets the current expansion state of the node.
+  ValueNotifier<bool> get isExpanded => _isExpanded;
 }
 
-///A tree view widget that for displaying data hierarchically
+/// A hierarchical tree view widget for displaying data in a collapsible structure.
+/// 
+/// Example:
+/// ```dart
+/// TreeView<String>(
+///   nodes: [
+///     TreeNode<String>(ValueKey('root'), 'Root'),
+///   ],
+///   builder: (context, node, isSelected, animation, select) {
+///     return Text(node.data);
+///   },
+///   expanderBuilder: (context, isExpanded, animation) {
+///     return Icon(isExpanded ? Icons.expand_more : Icons.chevron_right);
+///   },
+/// )
+/// ```
 class TreeView<T> extends StatefulWidget {
-  ///Creates a [TreeView] widget
+  /// Creates a [TreeView] widget with the specified parameters.
   const TreeView({
     required this.nodes,
     required this.builder,
@@ -62,36 +120,34 @@ class TreeView<T> extends StatefulWidget {
     super.key,
     this.animationCurve = Curves.easeInOut,
     this.animationDuration = const Duration(milliseconds: 500),
-  })  : onExpansionChanged = onExpansionChanged ?? _defaultExpansionChanged,
-        onSelectionChanged = onSelectionChanged ?? _defaultSelectionChanged;
+  })  : _onExpansionChanged = onExpansionChanged ?? _defaultExpansionChanged,
+        _onSelectionChanged = onSelectionChanged ?? _defaultSelectionChanged;
 
-  ///The root nodes for this tree view, which can have children
+  /// The root nodes of the tree view.
   final List<TreeNode<T>> nodes;
 
-  ///Called when a node is expanded or collapsed
-  final ExpansionChanged<T> onExpansionChanged;
+  /// Called when a node's expansion state changes.
+  final ExpansionChanged<T> _onExpansionChanged;
 
-  ///Called when the selected node changes
-  final ValueChanged<TreeNode<T>> onSelectionChanged;
+  /// Called when the selected node changes.
+  final ValueChanged<TreeNode<T>> _onSelectionChanged;
 
-  ///The currently selected node
+  /// The currently selected node, if any.
   final TreeNode<T>? selectedNode;
 
-  ///The widget to use for indentation of nodes
+  /// Widget used for indentation of child nodes.
   final Widget indentation;
 
-  ///The builder for the expander icon (usually an arrow icon or similar)
+  /// Builds the expander icon (typically an arrow or chevron).
   final ExpanderBuilder expanderBuilder;
 
-  final Widget Function(BuildContext, TreeNode<T>) dragBuilder;
-
-  ///The builder for the content of the expander (usually icon and text)
+  /// Builds the content of each node.
   final TreeViewBuilder<T> builder;
 
-  ///This modulates the animation for the expander when it opens and closes
+  /// The animation curve for expand/collapse animations.
   final Curve animationCurve;
 
-  ///The duration of the animation for the expander when it opens and closes
+  /// The duration of expand/collapse animations.
   final Duration animationDuration;
 
   @override
@@ -137,13 +193,13 @@ class _TreeViewState<T> extends State<TreeView<T>> {
     setState(() {
       _selectedNode = node;
     });
-    widget.onSelectionChanged(node);
+    widget._onSelectionChanged(node);
   }
 
   @override
   Widget build(BuildContext context) => Column(
         children: widget.nodes
-            .map((node) => _buildNode(node, widget.onExpansionChanged))
+            .map((node) => _buildNode(node, widget._onExpansionChanged))
             .toList(),
       );
 
