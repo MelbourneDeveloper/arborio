@@ -22,6 +22,11 @@ Check out the live sample app [here](https://melbournedeveloper.github.io/arbori
 Here's a simple example of how to create a tree view:
 
 ```dart
+import 'package:arborio/tree_view.dart';
+import 'package:flutter/material.dart';
+
+enum ElementType { file, folder }
+
 // Define your data type
 class FileSystemElement {
   FileSystemElement(this.name, this.type);
@@ -43,26 +48,38 @@ final nodes = [
   ),
 ];
 
-// Create the TreeView
-TreeView<FileSystemElement>(
-  nodes: nodes,
-  builder: (context, node, isSelected, animation, select) {
-    return Row(
-      children: [
-        Icon(node.data.type == ElementType.folder 
-          ? Icons.folder 
-          : Icons.file_copy),
-        Text(node.data.name),
-      ],
-    );
-  },
-  expanderBuilder: (context, isExpanded, animation) {
-    return RotationTransition(
-      turns: animation,
-      child: const Icon(Icons.chevron_right),
-    );
-  },
-)
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+        home: Scaffold(
+          body: TreeView<FileSystemElement>(
+            nodes: nodes,
+            builder: (context, node, isSelected, animation, select) => Row(
+              children: [
+                Icon(
+                  node.data.type == ElementType.folder
+                      ? Icons.folder
+                      : Icons.file_copy,
+                ),
+                Text(node.data.name),
+              ],
+            ),
+            expanderBuilder: (context, isExpanded, animation) =>
+                RotationTransition(
+              turns: animation,
+              child: const Icon(Icons.chevron_right),
+            ),
+          ),
+        ),
+        debugShowCheckedModeBanner: false,
+      );
+}
 ```
 
 ## Using TreeViewKey
@@ -71,15 +88,12 @@ The `TreeViewKey` allows programmatic control of the tree view:
 
 ```dart
 // Create a key
-final treeViewKey = TreeViewKey<FileSystemElement>();
-
-// Create a list to hold your nodes
-final List<TreeNode<FileSystemElement>> _fileTree = fileTree();
+const treeViewKey = TreeViewKey<FileSystemElement>();
 
 // Use it in your TreeView
 TreeView<FileSystemElement>(
   key: treeViewKey,
-  nodes: _fileTree,
+  nodes: nodes,
   builder: (context, node, isSelected, animation, select) {
     // ... node builder implementation
   },
@@ -100,7 +114,7 @@ You can dynamically add or remove nodes using the tree's state. This example use
 // Add a new node
 FloatingActionButton(
   onPressed: () => setState(() {
-    _fileTree.add(
+    nodes.add(
       TreeNode(
         const Key('newnode'),
         FileSystemElement('New Folder', ElementType.folder),
@@ -142,7 +156,6 @@ TreeView<FileSystemElement>(
       child: const Icon(Icons.chevron_right),
     );
   },
-  // ... other parameters
 )
 ```
 
