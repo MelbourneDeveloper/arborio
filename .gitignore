@@ -43,5 +43,7 @@ app.*.map.json
 /android/app/release
 
 example/coverage/
+coverage/
 
 example/test/failures/
+test/failures/

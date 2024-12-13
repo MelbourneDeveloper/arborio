@@ -3,6 +3,7 @@
 import 'dart:ui';
 
 import 'package:arborio/tree_view.dart';
+import 'package:arborio_sample/image_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 
@@ -183,7 +184,7 @@ class _MyAppState extends State<MyApp> {
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                 child: AppBar(
-                  backgroundColor: Colors.black.withOpacity(0.2),
+                  backgroundColor: Colors.black.withValues(alpha: 0.2),
                   title: Text(_title()),
                   elevation: 3,
                 ),
@@ -194,8 +195,8 @@ class _MyAppState extends State<MyApp> {
             children: [
               Opacity(
                 opacity: .025,
-                child: Image.asset(
-                  'assets/images/arborio_transparent.png',
+                child: imageAsset(
+                  'images/arborio_transparent.png',
                   fit: BoxFit.scaleDown,
                   width: double.infinity,
                   height: double.infinity,
@@ -218,7 +219,7 @@ class _MyAppState extends State<MyApp> {
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: Container(
             height: 90,
-            color: Colors.black.withOpacity(.1),
+            color: Colors.black.withValues(alpha: 0.1),
             width: double.infinity,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -438,11 +439,11 @@ class _MyAppState extends State<MyApp> {
                             Theme.of(context)
                                 .colorScheme
                                 .primary
-                                .withOpacity(.3),
+                                .withValues(alpha: 0.3),
                             Theme.of(context)
                                 .colorScheme
                                 .primary
-                                .withOpacity(.1),
+                                .withValues(alpha: 0.1),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -454,15 +455,15 @@ class _MyAppState extends State<MyApp> {
                   padding: const EdgeInsets.all(8),
                   child: Row(
                     children: [
-                      Image.asset(
+                      imageAsset(
                         switch (path.extension(node.data.name).toLowerCase()) {
-                          ('.mp3') => 'assets/images/music.png',
-                          ('.py') => 'assets/images/python.png',
-                          ('.jpg') => 'assets/images/image.png',
-                          ('.png') => 'assets/images/image.png',
-                          ('.dart') => 'assets/images/dart.png',
-                          ('.json') => 'assets/images/json.png',
-                          (_) => 'assets/images/file.png'
+                          ('.mp3') => 'images/music.png',
+                          ('.py') => 'images/python.png',
+                          ('.jpg') => 'images/image.png',
+                          ('.png') => 'images/image.png',
+                          ('.dart') => 'images/dart.png',
+                          ('.json') => 'images/json.png',
+                          (_) => 'images/file.png'
                         },
                         width: 32,
                         height: 32,
@@ -478,8 +479,8 @@ class _MyAppState extends State<MyApp> {
               children: [
                 RotationTransition(
                   turns: expansionAnimation,
-                  child: Image.asset(
-                    'assets/images/folder.png',
+                  child: imageAsset(
+                    'images/folder.png',
                     width: 32,
                     height: 32,
                   ),
