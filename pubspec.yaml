@@ -12,7 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-dev_dependencies:
+dev_dependencies:  
+  arborio_sample:
+    path: example
   austerity: ^1.1.0
   flutter_lints: ^2.0.0
   flutter_test:
