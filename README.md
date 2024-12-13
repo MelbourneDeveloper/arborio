@@ -17,20 +17,6 @@ Check out the live sample app [here](https://melbournedeveloper.github.io/arbori
 - 🎯 Type-safe with generics support
 - 📱 Responsive and mobile-friendly
 
-## Installation
-
-Add Arborio to your `pubspec.yaml`:
-
-```yaml
-dependencies:
-  arborio: ^0.3.0-beta
-```
-
-Then run:
-```bash
-flutter pub get
-```
-
 ## Basic Usage
 
 Here's a simple example of how to create a tree view:
@@ -87,10 +73,13 @@ The `TreeViewKey` allows programmatic control of the tree view:
 // Create a key
 final treeViewKey = TreeViewKey<FileSystemElement>();
 
+// Create a list to hold your nodes
+final List<TreeNode<FileSystemElement>> _fileTree = fileTree();
+
 // Use it in your TreeView
 TreeView<FileSystemElement>(
   key: treeViewKey,
-  nodes: nodes,
+  nodes: _fileTree,
   builder: (context, node, isSelected, animation, select) {
     // ... node builder implementation
   },
@@ -101,31 +90,40 @@ TreeView<FileSystemElement>(
     );
   },
 )
-
-// Later, control the tree view
-treeViewKey.currentState?.expandAll();  // Expand all nodes
-treeViewKey.currentState?.collapseAll(); // Collapse all nodes
 ```
 
 ## Node Management
 
-You can dynamically add or remove nodes:
+You can dynamically add or remove nodes using the tree's state. This example uses mutable state for simplicitly, but you can achieve the same result with immutable data classes.
 
 ```dart
 // Add a new node
-setState(() {
-  nodes.add(
-    TreeNode(
-      const Key('newNode'),
-      FileSystemElement('New Folder', ElementType.folder),
-    ),
-  );
-});
+FloatingActionButton(
+  onPressed: () => setState(() {
+    _fileTree.add(
+      TreeNode(
+        const Key('newnode'),
+        FileSystemElement('New Folder', ElementType.folder),
+      ),
+    );
+  }),
+  child: const Icon(Icons.add),
+),
 
-// Remove a node
-setState(() {
-  nodes.removeWhere((node) => node.key == const Key('nodeToRemove'));
-});
+// Expand/collapse all nodes
+FloatingActionButton(
+  onPressed: () => setState(() {
+    treeViewKey.currentState?.expandAll();
+  }),
+  child: const Icon(Icons.expand),
+),
+
+FloatingActionButton(
+  onPressed: () => setState(() {
+    treeViewKey.currentState?.collapseAll();
+  }),
+  child: const Icon(Icons.compress),
+),
 ```
 
 ## Handling Node Events
