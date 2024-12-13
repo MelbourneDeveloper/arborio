@@ -3,6 +3,7 @@
 import 'dart:ui';
 
 import 'package:arborio/tree_view.dart';
+import 'package:arborio_sample/image_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 
@@ -494,18 +495,5 @@ class _MyAppState extends State<MyApp> {
           turns: animationValue,
           child: _expander,
         ),
-      );
-
-  Image imageAsset(
-    String path, {
-    required double width,
-    required double height,
-    BoxFit? fit,
-  }) =>
-      Image.asset(
-        path,
-        width: width,
-        height: height,
-        fit: fit,
       );
 }
