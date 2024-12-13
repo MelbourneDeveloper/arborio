@@ -121,7 +121,10 @@ void main() {
               nodes: taxonomyData,
               builder: (context, node, isSelected, animation, select) =>
                   ListTile(
-                title: Text(node.data.name, key: ValueKey('${node.data.name}_title')),
+                title: Text(
+                  node.data.name,
+                  key: ValueKey('${node.data.name}_title'),
+                ),
                 subtitle: Text(node.data.scientificName),
                 selected: isSelected,
                 onTap: () => select(node),
@@ -146,6 +149,11 @@ void main() {
 
       expect(find.byKey(const ValueKey('Primates_title')), findsOneWidget);
       expect(find.byKey(const ValueKey('Carnivora_title')), findsOneWidget);
+
+      await expectLater(
+        find.byType(TreeView<Species>),
+        matchesGoldenFile('goldens/taxonomy_tree_expanded.png'),
+      );
     });
   });
 
@@ -375,65 +383,77 @@ void main() {
 
       // Initial state
       await tester.pump();
-      
+
       // Find the SizeTransition widget that controls the children's visibility
-      SizeTransition transition = tester.widget<SizeTransition>(
+      var transition = tester.widget<SizeTransition>(
         find.byType(SizeTransition),
       );
-      
+
       // Verify initial state
       expect(transition.sizeFactor.value, 0.0);
       expect(find.text('Header'), findsOneWidget);
-      
+
       // Test expansion
       await tester.tap(find.text('Header'));
       await tester.pump(); // Start animation
       await tester.pump(const Duration(milliseconds: 250)); // Mid-animation
-      
+
       // Get the updated transition widget
       transition = tester.widget<SizeTransition>(
         find.byType(SizeTransition),
       );
-      
+
       // Verify mid-animation state
       expect(transition.sizeFactor.value, isNot(0.0));
       expect(transition.sizeFactor.value, isNot(1.0));
-      
-      await tester.pump(const Duration(milliseconds: 250)); // Complete animation
-      
+
+      await tester
+          .pump(const Duration(milliseconds: 250)); // Complete animation
+
       // Get the updated transition widget
       transition = tester.widget<SizeTransition>(
         find.byType(SizeTransition),
       );
-      
+
       // Verify fully expanded state
       expect(transition.sizeFactor.value, 1.0);
       expect(find.text('Child 1'), findsOneWidget);
       expect(find.text('Child 2'), findsOneWidget);
 
+      await expectLater(
+        find.byType(Expander<void>),
+        matchesGoldenFile('goldens/expander_expanded.png'),
+      );
+
       // Test collapse
       await tester.tap(find.text('Header'));
       await tester.pump(); // Start animation
       await tester.pump(const Duration(milliseconds: 250)); // Mid-animation
-      
+
       // Get the updated transition widget
       transition = tester.widget<SizeTransition>(
         find.byType(SizeTransition),
       );
-      
+
       // Verify mid-animation state
       expect(transition.sizeFactor.value, isNot(0.0));
       expect(transition.sizeFactor.value, isNot(1.0));
-      
-      await tester.pump(const Duration(milliseconds: 250)); // Complete animation
-      
+
+      await tester
+          .pump(const Duration(milliseconds: 250)); // Complete animation
+
       // Get the updated transition widget
       transition = tester.widget<SizeTransition>(
         find.byType(SizeTransition),
       );
-      
+
       // Verify fully collapsed state
       expect(transition.sizeFactor.value, 0.0);
+
+      await expectLater(
+        find.byType(Expander<void>),
+        matchesGoldenFile('goldens/expander_collapsed.png'),
+      );
     });
   });
 }

@@ -47,7 +47,6 @@ void main() {
         expect(find.text('Music'), findsOneWidget);
         expect(find.text('Photos'), findsOneWidget);
 
-        //TODO: Fix
         await tester.pumpAndSettle();
 
         await expectLater(
