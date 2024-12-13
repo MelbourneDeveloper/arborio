@@ -17,6 +17,20 @@ Check out the live sample app [here](https://melbournedeveloper.github.io/arbori
 - 🎯 Type-safe with generics support
 - 📱 Responsive and mobile-friendly
 
+## Installation
+
+Add Arborio to your `pubspec.yaml`:
+
+```yaml
+dependencies:
+  arborio: ^0.3.0-beta
+```
+
+Then run:
+```bash
+flutter pub get
+```
+
 ## Basic Usage
 
 Here's a simple example of how to create a tree view:
@@ -76,7 +90,16 @@ final treeViewKey = TreeViewKey<FileSystemElement>();
 // Use it in your TreeView
 TreeView<FileSystemElement>(
   key: treeViewKey,
-  // ... other parameters
+  nodes: nodes,
+  builder: (context, node, isSelected, animation, select) {
+    // ... node builder implementation
+  },
+  expanderBuilder: (context, isExpanded, animation) {
+    return RotationTransition(
+      turns: animation,
+      child: const Icon(Icons.chevron_right),
+    );
+  },
 )
 
 // Later, control the tree view
@@ -114,6 +137,12 @@ TreeView<FileSystemElement>(
   },
   onSelectionChanged: (node) {
     print('Selected node: ${node.data.name}');
+  },
+  expanderBuilder: (context, isExpanded, animation) {
+    return RotationTransition(
+      turns: animation,
+      child: const Icon(Icons.chevron_right),
+    );
   },
   // ... other parameters
 )
