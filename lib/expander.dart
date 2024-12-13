@@ -1,12 +1,47 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:flutter/material.dart';
 
-typedef ExpanderContentBuilder = Widget Function(
+/// Callback for building the expander icon or content.
+/// 
+/// Example:
+/// ```dart
+/// Widget buildExpander(BuildContext context, bool isExpanded, Animation<double> animation) {
+///   return RotationTransition(
+///     turns: animation,
+///     child: Icon(Icons.chevron_right),
+///   );
+/// }
+/// ```
+typedef ExpanderBuilder = Widget Function(
   BuildContext context,
   bool isExpanded,
   Animation<double> animation,
 );
 
+/// An animated widget that can expand or collapse its children with smooth transitions.
+/// 
+/// Example:
+/// ```dart
+/// Expander<String>(
+///   contentBuilder: (context, isExpanded, animation) {
+///     return Text('Content');
+///   },
+///   children: [
+///     Text('Child 1'),
+///     Text('Child 2'),
+///   ],
+///   onExpansionChanged: (expanded) {
+///     print('Expanded: $expanded');
+///   },
+///   isExpanded: ValueNotifier(false),
+///   expanderBuilder: (context, isExpanded, animation) {
+///     return Icon(isExpanded ? Icons.expand_more : Icons.chevron_right);
+///   },
+/// )
+/// ```
 class Expander<T> extends StatefulWidget {
+  /// Creates an expander widget with the specified parameters.
   const Expander({
     required this.contentBuilder,
     required this.children,
@@ -19,13 +54,28 @@ class Expander<T> extends StatefulWidget {
     this.animationDuration = const Duration(milliseconds: 500),
   });
 
+  /// The widgets to show when the expander is expanded.
   final List<Widget> children;
+
+  /// Called when the expansion state changes.
   final ValueChanged<bool> onExpansionChanged;
+
+  /// Controls the expansion state of the widget.
   final ValueNotifier<bool> isExpanded;
+
+  /// Whether this widget can be expanded (shows an expander icon).
   final bool canExpand;
-  final ExpanderContentBuilder expanderBuilder;
-  final ExpanderContentBuilder contentBuilder;
+
+  /// Builds the expander icon (typically an arrow or chevron).
+  final ExpanderBuilder expanderBuilder;
+
+  /// Builds the main content of the expander.
+  final ExpanderBuilder contentBuilder;
+
+  /// The animation curve for expand/collapse transitions.
   final Curve animationCurve;
+
+  /// The duration of expand/collapse animations.
   final Duration animationDuration;
 
   @override
@@ -35,19 +85,14 @@ class Expander<T> extends StatefulWidget {
 class _ExpanderState<T> extends State<Expander<T>>
     with TickerProviderStateMixin {
   late AnimationController _controller;
-
-  ///The rotation animation (I think 0-0.25)
   late Animation<double> _expanderAnimation;
-
-  ///The full animation (I think 0-1?)
   late Animation<double> _contentAnimation;
-
-  late ValueNotifier<bool> isExpanded;
+  late ValueNotifier<bool> _isExpanded;
 
   @override
   void initState() {
     super.initState();
-    isExpanded = widget.isExpanded;
+    _isExpanded = widget.isExpanded;
     _init();
   }
 
@@ -56,7 +101,7 @@ class _ExpanderState<T> extends State<Expander<T>>
     super.didUpdateWidget(oldWidget);
     _initAnimations();
 
-    isExpanded
+    _isExpanded
       ..removeListener(_animate)
       ..addListener(_animate);
   }
@@ -78,7 +123,7 @@ class _ExpanderState<T> extends State<Expander<T>>
   }
 
   void _init() {
-    isExpanded.addListener(_animate);
+    _isExpanded.addListener(_animate);
     _controller = AnimationController(
       duration: widget.animationDuration,
       vsync: this,

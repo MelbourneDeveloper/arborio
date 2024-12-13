@@ -3,6 +3,7 @@
 import 'dart:ui';
 
 import 'package:arborio/tree_view.dart';
+import 'package:arborio_sample/image_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:path/path.dart' as path;
@@ -17,122 +18,122 @@ class FileSystemElement {
 }
 
 // Initialize your tree nodes with FileSystemElement type
-List<TreeNode<FileSystemElement>> fileTree = [
-  TreeNode<FileSystemElement>(
-    const Key('Projects'),
-    FileSystemElement('Projects', ElementType.folder),
-    [
+List<TreeNode<FileSystemElement>> fileTree() => [
       TreeNode<FileSystemElement>(
-        const Key('FlutterApp'),
-        FileSystemElement('FlutterApp', ElementType.folder),
+        const Key('Projects'),
+        FileSystemElement('Projects', ElementType.folder),
         [
           TreeNode<FileSystemElement>(
-            const Key('lib'),
-            FileSystemElement('lib', ElementType.folder),
+            const Key('FlutterApp'),
+            FileSystemElement('FlutterApp', ElementType.folder),
             [
               TreeNode<FileSystemElement>(
-                const Key('main.dart'),
-                FileSystemElement('main.dart', ElementType.file),
+                const Key('lib'),
+                FileSystemElement('lib', ElementType.folder),
+                [
+                  TreeNode<FileSystemElement>(
+                    const Key('main.dart'),
+                    FileSystemElement('main.dart', ElementType.file),
+                  ),
+                  TreeNode<FileSystemElement>(
+                    const Key('app.dart'),
+                    FileSystemElement('app.dart', ElementType.file),
+                  ),
+                ],
               ),
               TreeNode<FileSystemElement>(
-                const Key('app.dart'),
-                FileSystemElement('app.dart', ElementType.file),
+                const Key('assets'),
+                FileSystemElement('assets', ElementType.folder),
+                [
+                  TreeNode<FileSystemElement>(
+                    const Key('logo.png'),
+                    FileSystemElement('logo.png', ElementType.file),
+                  ),
+                  TreeNode<FileSystemElement>(
+                    const Key('data.json'),
+                    FileSystemElement('data.json', ElementType.file),
+                  ),
+                ],
               ),
             ],
           ),
           TreeNode<FileSystemElement>(
-            const Key('assets'),
-            FileSystemElement('assets', ElementType.folder),
+            const Key('PythonScripts'),
+            FileSystemElement('PythonScripts', ElementType.folder),
             [
               TreeNode<FileSystemElement>(
-                const Key('logo.png'),
-                FileSystemElement('logo.png', ElementType.file),
-              ),
-              TreeNode<FileSystemElement>(
-                const Key('data.json'),
-                FileSystemElement('data.json', ElementType.file),
+                const Key('script.py'),
+                FileSystemElement('script.py', ElementType.file),
               ),
             ],
           ),
         ],
       ),
       TreeNode<FileSystemElement>(
-        const Key('PythonScripts'),
-        FileSystemElement('PythonScripts', ElementType.folder),
+        const Key('Documents'),
+        FileSystemElement('Documents', ElementType.folder),
         [
           TreeNode<FileSystemElement>(
-            const Key('script.py'),
-            FileSystemElement('script.py', ElementType.file),
-          ),
-        ],
-      ),
-    ],
-  ),
-  TreeNode<FileSystemElement>(
-    const Key('Documents'),
-    FileSystemElement('Documents', ElementType.folder),
-    [
-      TreeNode<FileSystemElement>(
-        const Key('Resume.docx'),
-        FileSystemElement('Resume.docx', ElementType.file),
-      ),
-      TreeNode<FileSystemElement>(
-        const Key('Budget.xlsx'),
-        FileSystemElement('Budget.xlsx', ElementType.file),
-      ),
-    ],
-  ),
-  TreeNode<FileSystemElement>(
-    const Key('Music'),
-    FileSystemElement('Music', ElementType.folder),
-    [
-      TreeNode<FileSystemElement>(
-        const Key('Favorites'),
-        FileSystemElement('Favorites', ElementType.folder),
-        [
-          TreeNode<FileSystemElement>(
-            const Key('song1.mp3'),
-            FileSystemElement('song1.mp3', ElementType.file),
+            const Key('Resume.docx'),
+            FileSystemElement('Resume.docx', ElementType.file),
           ),
           TreeNode<FileSystemElement>(
-            const Key('song2.mp3'),
-            FileSystemElement('song2.mp3', ElementType.file),
-          ),
-        ],
-      ),
-    ],
-  ),
-  TreeNode<FileSystemElement>(
-    const Key('Photos'),
-    FileSystemElement('Photos', ElementType.folder),
-    [
-      TreeNode<FileSystemElement>(
-        const Key('Vacation'),
-        FileSystemElement('Vacation', ElementType.folder),
-        [
-          TreeNode<FileSystemElement>(
-            const Key('image1.jpg'),
-            FileSystemElement('image1.jpg', ElementType.file),
-          ),
-          TreeNode<FileSystemElement>(
-            const Key('image2.jpg'),
-            FileSystemElement('image2.jpg', ElementType.file),
+            const Key('Budget.xlsx'),
+            FileSystemElement('Budget.xlsx', ElementType.file),
           ),
         ],
       ),
       TreeNode<FileSystemElement>(
-        const Key('Family'),
-        FileSystemElement('Family', ElementType.folder),
+        const Key('Music'),
+        FileSystemElement('Music', ElementType.folder),
         [
           TreeNode<FileSystemElement>(
-            const Key('photo1.jpg'),
-            FileSystemElement('photo1.jpg', ElementType.file),
+            const Key('Favorites'),
+            FileSystemElement('Favorites', ElementType.folder),
+            [
+              TreeNode<FileSystemElement>(
+                const Key('song1.mp3'),
+                FileSystemElement('song1.mp3', ElementType.file),
+              ),
+              TreeNode<FileSystemElement>(
+                const Key('song2.mp3'),
+                FileSystemElement('song2.mp3', ElementType.file),
+              ),
+            ],
           ),
         ],
       ),
-    ],
-  ),
-];
+      TreeNode<FileSystemElement>(
+        const Key('Photos'),
+        FileSystemElement('Photos', ElementType.folder),
+        [
+          TreeNode<FileSystemElement>(
+            const Key('Vacation'),
+            FileSystemElement('Vacation', ElementType.folder),
+            [
+              TreeNode<FileSystemElement>(
+                const Key('image1.jpg'),
+                FileSystemElement('image1.jpg', ElementType.file),
+              ),
+              TreeNode<FileSystemElement>(
+                const Key('image2.jpg'),
+                FileSystemElement('image2.jpg', ElementType.file),
+              ),
+            ],
+          ),
+          TreeNode<FileSystemElement>(
+            const Key('Family'),
+            FileSystemElement('Family', ElementType.folder),
+            [
+              TreeNode<FileSystemElement>(
+                const Key('photo1.jpg'),
+                FileSystemElement('photo1.jpg', ElementType.file),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ];
 
 const defaultExpander = Icon(Icons.chevron_right);
 
@@ -165,6 +166,7 @@ class _MyAppState extends State<MyApp> {
   final textEditingController = TextEditingController(text: '500');
   TreeNode<FileSystemElement>? _selectedNode;
   var _seedColor = const Color(0xFF44AD4D);
+  final List<TreeNode<FileSystemElement>> _fileTree = fileTree();
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -184,7 +186,7 @@ class _MyAppState extends State<MyApp> {
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                 child: AppBar(
-                  backgroundColor: Colors.black.withOpacity(0.2),
+                  backgroundColor: Colors.black.withValues(alpha: 0.2),
                   title: Text(_title()),
                   elevation: 3,
                 ),
@@ -195,9 +197,9 @@ class _MyAppState extends State<MyApp> {
             children: [
               Opacity(
                 opacity: .025,
-                child: Image.asset(
-                  'assets/images/arborio_transparent.png',
-                  fit: BoxFit.cover,
+                child: imageAsset(
+                  'images/arborio_transparent.png',
+                  fit: BoxFit.scaleDown,
                   width: double.infinity,
                   height: double.infinity,
                 ),
@@ -218,26 +220,21 @@ class _MyAppState extends State<MyApp> {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: Container(
-            height: 200,
-            color: Colors.black.withOpacity(.1),
+            height: 90,
+            color: Colors.black.withValues(alpha: 0.1),
             width: double.infinity,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _durationField(),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: ColorPicker(
-                    pickerColor: _seedColor,
-                    onColorChanged: (pickedColor) => setState(() {
-                      _seedColor = pickedColor;
-                    }),
-                    pickerAreaHeightPercent: 0.8,
-                  ),
-                ),
-                _dropDownsRow(),
-                _buttonRow(),
-              ],
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  const SizedBox(width: 16),
+                  _durationField(),
+                  const SizedBox(width: 16),
+                  _dropDownsRow(),
+                  const SizedBox(width: 16),
+                  _buttonRow(),
+                ],
+              ),
             ),
           ),
         ),
@@ -358,7 +355,7 @@ class _MyAppState extends State<MyApp> {
           FloatingActionButton(
             tooltip: 'Add',
             onPressed: () => setState(
-              () => fileTree.add(
+              () => _fileTree.add(
                 TreeNode(
                   const Key('newnode'),
                   FileSystemElement(
@@ -444,11 +441,11 @@ class _MyAppState extends State<MyApp> {
                             Theme.of(context)
                                 .colorScheme
                                 .primary
-                                .withOpacity(.3),
+                                .withValues(alpha: 0.3),
                             Theme.of(context)
                                 .colorScheme
                                 .primary
-                                .withOpacity(.1),
+                                .withValues(alpha: 0.1),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -460,15 +457,15 @@ class _MyAppState extends State<MyApp> {
                   padding: const EdgeInsets.all(8),
                   child: Row(
                     children: [
-                      Image.asset(
+                      imageAsset(
                         switch (path.extension(node.data.name).toLowerCase()) {
-                          ('.mp3') => 'assets/images/music.png',
-                          ('.py') => 'assets/images/python.png',
-                          ('.jpg') => 'assets/images/image.png',
-                          ('.png') => 'assets/images/image.png',
-                          ('.dart') => 'assets/images/dart.png',
-                          ('.json') => 'assets/images/json.png',
-                          (_) => 'assets/images/file.png'
+                          ('.mp3') => 'images/music.png',
+                          ('.py') => 'images/python.png',
+                          ('.jpg') => 'images/image.png',
+                          ('.png') => 'images/image.png',
+                          ('.dart') => 'images/dart.png',
+                          ('.json') => 'images/json.png',
+                          (_) => 'images/file.png'
                         },
                         width: 32,
                         height: 32,
@@ -484,8 +481,8 @@ class _MyAppState extends State<MyApp> {
               children: [
                 RotationTransition(
                   turns: expansionAnimation,
-                  child: Image.asset(
-                    'assets/images/folder.png',
+                  child: imageAsset(
+                    'images/folder.png',
                     width: 32,
                     height: 32,
                   ),
@@ -495,7 +492,7 @@ class _MyAppState extends State<MyApp> {
               ],
             ),
         },
-        nodes: fileTree,
+        nodes: _fileTree,
         expanderBuilder: (context, node, animationValue) => RotationTransition(
           turns: animationValue,
           child: _expander,

@@ -1,16 +1,184 @@
-# treeview
+# Arborio
 
-A new Flutter project.
+An elegant, flexible Treeview with Animation. Display hierarchical data in Flutter.
 
-## Getting Started
+![Logo](/example/assets//images/arborio_small.png)
 
-This project is a starting point for a Flutter application.
+![Sample](/images/sample.gif)
 
-A few resources to get you started if this is your first Flutter project:
+Check out the live sample app [here](https://melbournedeveloper.github.io/arborio/)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Features
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- 🌳 Hierarchical data display with unlimited nesting
+- ✨ Smooth animations for expand/collapse operations
+- 🎨 Fully customizable node and expander appearance
+- 🔑 Global key support for programmatic control
+- 🎯 Type-safe with generics support
+- 📱 Responsive and mobile-friendly
+
+## Basic Usage
+
+Here's a simple example of how to create a tree view:
+
+```dart
+// Define your data type
+class FileSystemElement {
+  FileSystemElement(this.name, this.type);
+  final String name;
+  final ElementType type;
+}
+
+// Create tree nodes
+final nodes = [
+  TreeNode<FileSystemElement>(
+    const Key('root'),
+    FileSystemElement('Documents', ElementType.folder),
+    [
+      TreeNode<FileSystemElement>(
+        const Key('child1'),
+        FileSystemElement('report.pdf', ElementType.file),
+      ),
+    ],
+  ),
+];
+
+// Create the TreeView
+TreeView<FileSystemElement>(
+  nodes: nodes,
+  builder: (context, node, isSelected, animation, select) {
+    return Row(
+      children: [
+        Icon(node.data.type == ElementType.folder 
+          ? Icons.folder 
+          : Icons.file_copy),
+        Text(node.data.name),
+      ],
+    );
+  },
+  expanderBuilder: (context, isExpanded, animation) {
+    return RotationTransition(
+      turns: animation,
+      child: const Icon(Icons.chevron_right),
+    );
+  },
+)
+```
+
+## Using TreeViewKey
+
+The `TreeViewKey` allows programmatic control of the tree view:
+
+```dart
+// Create a key
+final treeViewKey = TreeViewKey<FileSystemElement>();
+
+// Create a list to hold your nodes
+final List<TreeNode<FileSystemElement>> _fileTree = fileTree();
+
+// Use it in your TreeView
+TreeView<FileSystemElement>(
+  key: treeViewKey,
+  nodes: _fileTree,
+  builder: (context, node, isSelected, animation, select) {
+    // ... node builder implementation
+  },
+  expanderBuilder: (context, isExpanded, animation) {
+    return RotationTransition(
+      turns: animation,
+      child: const Icon(Icons.chevron_right),
+    );
+  },
+)
+```
+
+## Node Management
+
+You can dynamically add or remove nodes using the tree's state. This example uses mutable state for simplicitly, but you can achieve the same result with immutable data classes.
+
+```dart
+// Add a new node
+FloatingActionButton(
+  onPressed: () => setState(() {
+    _fileTree.add(
+      TreeNode(
+        const Key('newnode'),
+        FileSystemElement('New Folder', ElementType.folder),
+      ),
+    );
+  }),
+  child: const Icon(Icons.add),
+),
+
+// Expand/collapse all nodes
+FloatingActionButton(
+  onPressed: () => setState(() {
+    treeViewKey.currentState?.expandAll();
+  }),
+  child: const Icon(Icons.expand),
+),
+
+FloatingActionButton(
+  onPressed: () => setState(() {
+    treeViewKey.currentState?.collapseAll();
+  }),
+  child: const Icon(Icons.compress),
+),
+```
+
+## Handling Node Events
+
+```dart
+TreeView<FileSystemElement>(
+  onExpansionChanged: (node, expanded) {
+    print('Node ${node.data.name} is now ${expanded ? 'expanded' : 'collapsed'}');
+  },
+  onSelectionChanged: (node) {
+    print('Selected node: ${node.data.name}');
+  },
+  expanderBuilder: (context, isExpanded, animation) {
+    return RotationTransition(
+      turns: animation,
+      child: const Icon(Icons.chevron_right),
+    );
+  },
+  // ... other parameters
+)
+```
+
+## Customizing Node Appearance
+
+The `builder` parameter gives you full control over node appearance, along with an animation variable so you can respond to changes over time:
+
+```dart
+builder: (context, node, isSelected, animation, select) {
+  return InkWell(
+    onTap: () => select(node),
+    child: Container(
+      color: isSelected ? Colors.blue.withOpacity(0.1) : null,
+      padding: const EdgeInsets.all(8),
+      child: Row(
+        children: [
+          if (node.data.type == ElementType.folder)
+            RotationTransition(
+              turns: animation,
+              child: const Icon(Icons.folder),
+            )
+          else
+            const Icon(Icons.file_copy),
+          const SizedBox(width: 8),
+          Text(node.data.name),
+        ],
+      ),
+    ),
+  );
+}
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the BSD 3-Clause - see the LICENSE file for details.
