@@ -196,7 +196,7 @@ class _MyAppState extends State<MyApp> {
               Opacity(
                 opacity: .025,
                 child: imageAsset(
-                  'images/arborio_transparent.png',
+                  'assets/images/arborio_transparent.png',
                   fit: BoxFit.scaleDown,
                   width: double.infinity,
                   height: double.infinity,
@@ -457,13 +457,13 @@ class _MyAppState extends State<MyApp> {
                     children: [
                       imageAsset(
                         switch (path.extension(node.data.name).toLowerCase()) {
-                          ('.mp3') => 'images/music.png',
-                          ('.py') => 'images/python.png',
-                          ('.jpg') => 'images/image.png',
-                          ('.png') => 'images/image.png',
-                          ('.dart') => 'images/dart.png',
-                          ('.json') => 'images/json.png',
-                          (_) => 'images/file.png'
+                          ('.mp3') => 'assets/images/music.png',
+                          ('.py') => 'assets/images/python.png',
+                          ('.jpg') => 'assets/images/image.png',
+                          ('.png') => 'assets/images/image.png',
+                          ('.dart') => 'assets/images/dart.png',
+                          ('.json') => 'assets/images/json.png',
+                          (_) => 'assets/images/file.png'
                         },
                         width: 32,
                         height: 32,
@@ -480,7 +480,7 @@ class _MyAppState extends State<MyApp> {
                 RotationTransition(
                   turns: expansionAnimation,
                   child: imageAsset(
-                    'images/folder.png',
+                    'assets/images/folder.png',
                     width: 32,
                     height: 32,
                   ),
