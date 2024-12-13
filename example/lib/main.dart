@@ -183,7 +183,7 @@ class _MyAppState extends State<MyApp> {
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                 child: AppBar(
-                  backgroundColor: Colors.black.withOpacity(0.2),
+                  backgroundColor: Colors.black.withValues(alpha: 0.2),
                   title: Text(_title()),
                   elevation: 3,
                 ),
@@ -218,7 +218,7 @@ class _MyAppState extends State<MyApp> {
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: Container(
             height: 90,
-            color: Colors.black.withOpacity(.1),
+            color: Colors.black.withValues(alpha: 0.1),
             width: double.infinity,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -438,11 +438,11 @@ class _MyAppState extends State<MyApp> {
                             Theme.of(context)
                                 .colorScheme
                                 .primary
-                                .withOpacity(.3),
+                                .withValues(alpha: 0.3),
                             Theme.of(context)
                                 .colorScheme
                                 .primary
-                                .withOpacity(.1),
+                                .withValues(alpha: 0.1),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
