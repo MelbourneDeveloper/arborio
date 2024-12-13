@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ vars.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
+          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:"
+          architecture: x64
+
+      - name: Analyze
+        run: dart analyze --no-fatal-warnings
+
+      - name: Check Formatting
+        run: dart format lib test --set-exit-if-changed
+
+      - name: Run Tests
+        run: flutter test --coverage
+
+      - name: Check Test Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v2
+        with:
+          path: 'src/Flutter/coverage/lcov.info'
+          min_coverage: 100 

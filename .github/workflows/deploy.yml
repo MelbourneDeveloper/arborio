@@ -32,21 +32,6 @@ jobs:
           cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:"
           architecture: x64
 
-      - name: Analyze
-        run: dart analyze --no-fatal-warnings
-
-      - name: Check Formatting
-        run: dart format lib test --set-exit-if-changed
-
-      - name: Run Tests
-        run: flutter test --coverage
- 
-      - name: Check Test Coverage
-        uses: VeryGoodOpenSource/very_good_coverage@v2
-        with:
-          path: 'src/Flutter/coverage/lcov.info'
-          min_coverage: 100
-
       - name: Build WASM
         run: |
           cd example
