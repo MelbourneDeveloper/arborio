@@ -1,5 +1,8 @@
 # Arborio
 
+[![CI](https://github.com/melbournedeveloper/arborio/actions/workflows/ci.yml/badge.svg)](https://github.com/melbournedeveloper/arborio/actions/workflows/ci.yml)
+[![Coverage](https://raw.githubusercontent.com/melbournedeveloper/arborio/main/coverage_badge.svg)](https://github.com/melbournedeveloper/arborio/actions/workflows/ci.yml)
+
 An elegant, flexible Treeview with Animation. Display hierarchical data in Flutter.
 
 ![Logo](/example/assets//images/arborio_small.png)

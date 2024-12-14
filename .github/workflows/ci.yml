@@ -4,6 +4,12 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
 
 jobs:
   check:
@@ -37,3 +43,19 @@ jobs:
         with:
           path: 'coverage/lcov.info'
           min_coverage: 100
+
+      - name: Generate Coverage Badge
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: jaywcjlove/coverage-badges-cli@main
+        with:
+          source: coverage/lcov.info
+          output: coverage_badge.svg
+
+      - name: Commit Coverage Badge
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add coverage_badge.svg
+          git commit -m "docs: update coverage badge" || echo "No changes to commit"
+          git push
