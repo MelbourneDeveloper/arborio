@@ -289,6 +289,8 @@ class _MyAppState extends State<MyApp> {
 
   /// The tree view widget
   TreeView<FileSystemElement> _treeView() => TreeView(
+        contentPadding:
+            _displayStyle == DisplayStyle.crazy ? null : EdgeInsets.zero,
         onSelectionChanged: (node) => setState(() => _selectedNode = node),
         key: treeViewKey,
         animationDuration: Duration(milliseconds: _animationDuration),
@@ -340,8 +342,7 @@ class _MyAppState extends State<MyApp> {
   ) =>
       InkWell(
         onTap: () => select(node),
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+        child: DecoratedBox(
           decoration: BoxDecoration(
             gradient: isSelected
                 ? LinearGradient(
@@ -374,7 +375,7 @@ class _MyAppState extends State<MyApp> {
                 : null,
           ),
           child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(12),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -587,50 +588,45 @@ class _MyAppState extends State<MyApp> {
     TreeNode<FileSystemElement> node,
   ) =>
       Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        margin: EdgeInsets.zero,
         constraints: const BoxConstraints(maxWidth: 400),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.blue.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(
-                  Icons.folder,
-                  color: Colors.blue,
-                ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.blue.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(8),
               ),
-              const SizedBox(width: 16),
-              Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      node.data.name,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      'Directory',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
+              child: const Icon(
+                Icons.folder,
+                color: Colors.blue,
               ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  node.data.name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  'Directory',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ],
         ),
       );
 

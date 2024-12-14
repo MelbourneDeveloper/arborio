@@ -52,6 +52,7 @@ class Expander<T> extends StatefulWidget {
     super.key,
     this.animationCurve = Curves.easeInOut,
     this.animationDuration = const Duration(milliseconds: 500),
+    this.contentPadding,
   });
 
   /// The widgets to show when the expander is expanded.
@@ -77,6 +78,9 @@ class Expander<T> extends StatefulWidget {
 
   /// The duration of expand/collapse animations.
   final Duration animationDuration;
+
+  /// The padding around the content.
+  final EdgeInsetsGeometry? contentPadding;
 
   @override
   State<Expander<T>> createState() => _ExpanderState();
@@ -157,6 +161,7 @@ class _ExpanderState<T> extends State<Expander<T>>
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
+            contentPadding: widget.contentPadding,
             onTap: _handleTap,
             leading: widget.canExpand
                 ? widget.expanderBuilder(
