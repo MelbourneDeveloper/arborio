@@ -95,13 +95,13 @@ class _MyAppState extends State<MyApp> {
               child: Row(
                 children: [
                   const SizedBox(width: 16),
+                  _styleToggle(),
+                  const SizedBox(width: 16),
                   _durationField(),
                   const SizedBox(width: 16),
                   _dropDownsRow(),
                   const SizedBox(width: 16),
                   _buttonRow(),
-                  const SizedBox(width: 16),
-                  _styleToggle(),
                 ],
               ),
             ),
@@ -305,10 +305,13 @@ class _MyAppState extends State<MyApp> {
           (ElementType.folder) => _folder(expansionAnimation, node),
         },
         nodes: _fileTree,
-        expanderBuilder: (context, node, animationValue) => RotationTransition(
-          turns: animationValue,
-          child: _expander,
-        ),
+        expanderBuilder: (context, node, animationValue) =>
+            _displayStyle == DisplayStyle.crazy
+                ? RotationTransition(
+                    turns: animationValue,
+                    child: _expander,
+                  )
+                : _expander,
       );
 
   /// Renders file nodes with different styles based on the selected display
@@ -372,6 +375,7 @@ class _MyAppState extends State<MyApp> {
             child: Row(
               children: [
                 Container(
+                  width: 200,
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: Theme.of(context)
@@ -380,16 +384,19 @@ class _MyAppState extends State<MyApp> {
                         .withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(
-                    switch (path.extension(node.data.name).toLowerCase()) {
-                      ('.mp3') => Icons.music_note,
-                      ('.py') => Icons.code,
-                      ('.jpg' || '.png') => Icons.image,
-                      ('.dart') => Icons.flutter_dash,
-                      ('.json') => Icons.data_object,
-                      _ => Icons.insert_drive_file,
-                    },
-                    color: Theme.of(context).colorScheme.primary,
+                  child: SizedBox(
+                    width: 12,
+                    child: Icon(
+                      switch (path.extension(node.data.name).toLowerCase()) {
+                        ('.mp3') => Icons.music_note,
+                        ('.py') => Icons.code,
+                        ('.jpg' || '.png') => Icons.image,
+                        ('.dart') => Icons.flutter_dash,
+                        ('.json') => Icons.data_object,
+                        _ => Icons.insert_drive_file,
+                      },
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -561,33 +568,19 @@ class _MyAppState extends State<MyApp> {
   ) =>
       Container(
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.blue.withValues(alpha: 0.2),
-              Colors.purple.withValues(alpha: 0.2),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(12),
-        ),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
             children: [
-              RotationTransition(
-                turns: expansionAnimation,
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(
-                    Icons.folder,
-                    color: Colors.blue,
-                  ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.blue.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.folder,
+                  color: Colors.blue,
                 ),
               ),
               const SizedBox(width: 16),
@@ -631,15 +624,12 @@ class _MyAppState extends State<MyApp> {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: Row(
             children: [
-              RotationTransition(
-                turns: expansionAnimation,
-                child: const Text(
-                  '▶',
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontFamily: 'monospace',
-                    fontSize: 16,
-                  ),
+              const Text(
+                '▶',
+                style: TextStyle(
+                  color: Colors.green,
+                  fontFamily: 'monospace',
+                  fontSize: 16,
                 ),
               ),
               const SizedBox(width: 8),
