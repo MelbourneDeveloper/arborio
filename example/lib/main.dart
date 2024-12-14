@@ -339,6 +339,7 @@ class _MyAppState extends State<MyApp> {
         onTap: () => select(node),
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          constraints: const BoxConstraints(maxWidth: 400),
           decoration: BoxDecoration(
             gradient: isSelected
                 ? LinearGradient(
@@ -373,9 +374,10 @@ class _MyAppState extends State<MyApp> {
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  width: 200,
+                  width: 48,
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: Theme.of(context)
@@ -384,34 +386,33 @@ class _MyAppState extends State<MyApp> {
                         .withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: SizedBox(
-                    width: 12,
-                    child: Icon(
-                      switch (path.extension(node.data.name).toLowerCase()) {
-                        ('.mp3') => Icons.music_note,
-                        ('.py') => Icons.code,
-                        ('.jpg' || '.png') => Icons.image,
-                        ('.dart') => Icons.flutter_dash,
-                        ('.json') => Icons.data_object,
-                        _ => Icons.insert_drive_file,
-                      },
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                  child: Icon(
+                    switch (path.extension(node.data.name).toLowerCase()) {
+                      ('.mp3') => Icons.music_note,
+                      ('.py') => Icons.code,
+                      ('.jpg' || '.png') => Icons.image,
+                      ('.dart') => Icons.flutter_dash,
+                      ('.json') => Icons.data_object,
+                      _ => Icons.insert_drive_file,
+                    },
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 const SizedBox(width: 16),
-                Expanded(
+                Flexible(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         node.data.name,
                         style: Theme.of(context).textTheme.titleMedium,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       Text(
                         'File Type: '
                         '${path.extension(node.data.name).toUpperCase()}',
                         style: Theme.of(context).textTheme.bodySmall,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
@@ -494,9 +495,9 @@ class _MyAppState extends State<MyApp> {
   ) =>
       InkWell(
         onTap: () => select(node),
-        // ignore: use_decorated_box
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 8),
+          constraints: const BoxConstraints(maxWidth: 400),
           decoration: BoxDecoration(
             gradient: isSelected
                 ? LinearGradient(
@@ -519,6 +520,7 @@ class _MyAppState extends State<MyApp> {
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 imageAsset(
                   switch (path.extension(node.data.name).toLowerCase()) {
@@ -534,7 +536,12 @@ class _MyAppState extends State<MyApp> {
                   height: 32,
                 ),
                 const SizedBox(width: 16),
-                Text(node.data.name),
+                Flexible(
+                  child: Text(
+                    node.data.name,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ],
             ),
           ),
@@ -568,9 +575,11 @@ class _MyAppState extends State<MyApp> {
   ) =>
       Container(
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        constraints: const BoxConstraints(maxWidth: 400),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                 padding: const EdgeInsets.all(8),
@@ -584,24 +593,28 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               const SizedBox(width: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    node.data.name,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      node.data.name,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  Text(
-                    'Directory',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
+                    Text(
+                      'Directory',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[600],
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
