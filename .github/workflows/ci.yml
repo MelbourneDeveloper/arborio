@@ -35,5 +35,5 @@ jobs:
       - name: Check Test Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
-          path: 'src/Flutter/coverage/lcov.info'
-          min_coverage: 100 
+          path: 'coverage/lcov.info'
+          min_coverage: 100
