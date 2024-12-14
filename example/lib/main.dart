@@ -289,7 +289,7 @@ class _MyAppState extends State<MyApp> {
 
   /// The tree view widget
   TreeView<FileSystemElement> _treeView() => TreeView(
-        contentPadding:
+        nodeContentPadding:
             _displayStyle == DisplayStyle.crazy ? null : EdgeInsets.zero,
         onSelectionChanged: (node) => setState(() => _selectedNode = node),
         key: treeViewKey,

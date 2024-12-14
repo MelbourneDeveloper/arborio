@@ -79,7 +79,7 @@ class Expander<T> extends StatefulWidget {
   /// The duration of expand/collapse animations.
   final Duration animationDuration;
 
-  /// The padding around the content.
+  /// The padding around the content. The default is 16.0.
   final EdgeInsetsGeometry? contentPadding;
 
   @override
