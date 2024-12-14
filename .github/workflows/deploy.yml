@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -33,11 +32,33 @@ jobs:
           cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:"
           architecture: x64
 
-      - name: Build Flutter Web App
+      - name: Build WASM
         run: |
           cd example
           flutter pub get
-          flutter build web --release --base-href /arborio/
+          flutter build web --release --wasm --base-href /arborio/
+
+      - name: Update COOP and COEP headers
+        run: |
+          echo '
+          {
+            "headers": [
+              {
+                "source": "**/*",
+                "headers": [
+                  {
+                    "key": "Cross-Origin-Embedder-Policy",
+                    "value": "credentialless"
+                  },
+                  {
+                    "key": "Cross-Origin-Opener-Policy",
+                    "value": "same-origin"
+                  }
+                ]
+              }
+            ]
+          }
+          ' > example/build/web/_headers
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -45,7 +66,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './example/build/web' # Ensure this is the path to the build output
+          path: './example/build/web'
 
       - name: Deploy to GitHub Pages
         id: deployment

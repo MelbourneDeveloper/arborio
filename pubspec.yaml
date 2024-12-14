@@ -1,19 +1,23 @@
 name: arborio
 description: "An elegant, flexible Treeview with Animation. Display hierarchical data in Flutter."
-version: 0.3.0-beta
+version: 1.0.1
 repository: https://github.com/MelbourneDeveloper/treeview
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
-
 
 dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
 
-dev_dependencies:
+dev_dependencies:  
+  arborio_sample:
+    path: example
   austerity: ^1.1.0
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
+
+flutter:
+  uses-material-design: true

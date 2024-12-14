@@ -1,0 +1,51 @@
+name: generate_goldens
+
+on:
+  workflow_dispatch:
+ 
+permissions:
+  contents: write
+
+jobs:
+  generate_goldens:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "${{ vars.FLUTTER_VERSION }}"
+          channel: "stable"
+          architecture: x64
+
+      - name: Get Dependencies
+        run: flutter pub get
+
+      - name: Remove previous goldens
+        run: if [ -e "./test/goldens/*.png" ]; then rm -rf "./test/goldens/*.png"; fi
+
+      - name: Run tests and update goldens
+        id: verify_diff
+        run: |
+          flutter test test/*.* --update-goldens
+          git diff --quiet . || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit Updated Goldens
+        if: steps.verify_diff.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .
+          git commit -m "Updated goldens via Update Goldens pipeline" -a
+
+      - name: Push Changes
+        if: steps.verify_diff.outputs.changed == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}

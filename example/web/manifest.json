@@ -1,11 +1,11 @@
 {
-    "name": "example",
-    "short_name": "example",
+    "name": "Arborio Sample",
+    "short_name": "Arborio Sample",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Demonstrates the Arborio Flutter Treeview package",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
