@@ -300,10 +300,13 @@ class _MyAppState extends State<MyApp> {
           expansionAnimation,
           select,
         ) =>
-            switch (node.data.type) {
-          (ElementType.file) => _file(select, node, isSelected, context),
-          (ElementType.folder) => _folder(expansionAnimation, node),
-        },
+            Align(
+          alignment: Alignment.centerLeft,
+          child: switch (node.data.type) {
+            (ElementType.file) => _file(select, node, isSelected, context),
+            (ElementType.folder) => _folder(expansionAnimation, node),
+          },
+        ),
         nodes: _fileTree,
         expanderBuilder: (context, node, animationValue) =>
             _displayStyle == DisplayStyle.crazy
@@ -338,8 +341,7 @@ class _MyAppState extends State<MyApp> {
       InkWell(
         onTap: () => select(node),
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          constraints: const BoxConstraints(maxWidth: 400),
+          margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
           decoration: BoxDecoration(
             gradient: isSelected
                 ? LinearGradient(
@@ -357,7 +359,7 @@ class _MyAppState extends State<MyApp> {
                     end: Alignment.bottomRight,
                   )
                 : null,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(8),
             boxShadow: isSelected
                 ? [
                     BoxShadow(
@@ -365,26 +367,26 @@ class _MyAppState extends State<MyApp> {
                           .colorScheme
                           .primary
                           .withValues(alpha: 0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
+                      blurRadius: 4,
+                      offset: const Offset(0, 1),
                     ),
                   ]
                 : null,
           ),
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(8),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  width: 48,
-                  padding: const EdgeInsets.all(8),
+                  width: 32,
+                  padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     color: Theme.of(context)
                         .colorScheme
                         .primaryContainer
                         .withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(4),
                   ),
                   child: Icon(
                     switch (path.extension(node.data.name).toLowerCase()) {
@@ -396,22 +398,29 @@ class _MyAppState extends State<MyApp> {
                       _ => Icons.insert_drive_file,
                     },
                     color: Theme.of(context).colorScheme.primary,
+                    size: 16,
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 8),
                 Flexible(
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         node.data.name,
-                        style: Theme.of(context).textTheme.titleMedium,
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontSize: 14,
+                                ),
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
                         'File Type: '
                         '${path.extension(node.data.name).toUpperCase()}',
-                        style: Theme.of(context).textTheme.bodySmall,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              fontSize: 11,
+                            ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
@@ -433,7 +442,7 @@ class _MyAppState extends State<MyApp> {
       InkWell(
         onTap: () => select(node),
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+          margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
           decoration: BoxDecoration(
             color: isSelected ? Colors.green.withValues(alpha: 0.2) : null,
             border: Border.all(
@@ -441,8 +450,9 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   switch (path.extension(node.data.name).toLowerCase()) {
@@ -456,16 +466,19 @@ class _MyAppState extends State<MyApp> {
                   style: const TextStyle(
                     color: Colors.green,
                     fontFamily: 'monospace',
-                    fontSize: 16,
+                    fontSize: 14,
                   ),
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  node.data.name,
-                  style: const TextStyle(
-                    color: Colors.green,
-                    fontFamily: 'monospace',
-                    fontSize: 14,
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    node.data.name,
+                    style: const TextStyle(
+                      color: Colors.green,
+                      fontFamily: 'monospace',
+                      fontSize: 12,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
