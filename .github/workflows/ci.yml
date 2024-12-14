@@ -44,11 +44,16 @@ jobs:
           path: 'coverage/lcov.info'
           min_coverage: 100
 
+      - name: Create Coverage JSON
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo '{"coverage": 100}' > coverage/coverage.json
+
       - name: Generate Coverage Badge
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: jaywcjlove/coverage-badges-cli@main
         with:
-          source: '{"coverage": 100}'
+          source: coverage/coverage.json
           output: coverage_badge.svg
 
       - name: Commit Coverage Badge
