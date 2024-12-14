@@ -20,6 +20,9 @@ jobs:
           cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:"
           architecture: x64
 
+      - name: Get Dependencies
+        run: flutter pub get
+
       - name: Analyze
         run: dart analyze --no-fatal-warnings
 
