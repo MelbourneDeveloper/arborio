@@ -44,11 +44,21 @@ jobs:
           path: 'coverage/lcov.info'
           min_coverage: 100
 
+      - name: Install lcov
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: sudo apt-get install -y lcov
+
+      - name: Convert LCOV to JSON
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          total_lines=$(lcov --summary coverage/lcov.info 2>&1 | grep "lines" | cut -d ':' -f 2 | cut -d '%' -f 1 | tr -d ' ')
+          echo "{\"coverage\": $total_lines}" > coverage/coverage.json
+
       - name: Generate Coverage Badge
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: jaywcjlove/coverage-badges-cli@main
         with:
-          source: coverage/lcov.info
+          source: coverage/coverage.json
           output: coverage_badge.svg
 
       - name: Commit Coverage Badge
