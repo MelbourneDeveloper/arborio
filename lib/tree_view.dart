@@ -112,6 +112,7 @@ class TreeView<T> extends StatefulWidget {
     required this.nodes,
     required this.builder,
     required this.expanderBuilder,
+    this.headerBuilder,
     ExpansionChanged<T>? onExpansionChanged,
     ValueChanged<TreeNode<T>>? onSelectionChanged,
     this.selectedNode,
@@ -148,6 +149,9 @@ class TreeView<T> extends StatefulWidget {
 
   /// The duration of expand/collapse animations.
   final Duration animationDuration;
+
+  ///The builder for the header of the expander
+  final HeaderBuilder? headerBuilder;
 
   @override
   State<TreeView<T>> createState() => _TreeViewState<T>();
@@ -213,6 +217,7 @@ class _TreeViewState<T> extends State<TreeView<T>> {
             widget.indentation,
             Expanded(
               child: Expander<T>(
+                headerBuilder: widget.headerBuilder,
                 animationDuration: widget.animationDuration,
                 animationCurve: widget.animationCurve,
                 expanderBuilder: widget.expanderBuilder,

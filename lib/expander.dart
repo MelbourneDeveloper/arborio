@@ -19,6 +19,16 @@ typedef ExpanderBuilder = Widget Function(
   Animation<double> animation,
 );
 
+///The callback for building the header of the expander
+typedef HeaderBuilder = Widget Function(
+  BuildContext context,
+  VoidCallback onTap,
+  Widget? leading,
+  Widget title,
+);
+
+///Basic animated expander widget that can be used to expand/collapse a list of items
+=======
 /// An animated widget that can expand or collapse its children with smooth transitions.
 ///
 /// Example:
@@ -49,6 +59,7 @@ class Expander<T> extends StatefulWidget {
     required this.isExpanded,
     required this.expanderBuilder,
     this.canExpand = true,
+    this.headerBuilder,
     super.key,
     this.animationCurve = Curves.easeInOut,
     this.animationDuration = const Duration(milliseconds: 500),
@@ -71,6 +82,10 @@ class Expander<T> extends StatefulWidget {
 
   /// Builds the main content of the expander.
   final ExpanderBuilder contentBuilder;
+
+  /// Optional builder for custom header implementation. If not provided,
+  /// defaults to ListTile
+  final HeaderBuilder? headerBuilder;
 
   /// The animation curve for expand/collapse transitions.
   final Curve animationCurve;
@@ -156,21 +171,37 @@ class _ExpanderState<T> extends State<Expander<T>>
   Widget build(BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          ListTile(
-            onTap: _handleTap,
-            leading: widget.canExpand
-                ? widget.expanderBuilder(
-                    context,
-                    widget.isExpanded.value,
-                    _expanderAnimation,
-                  )
-                : null,
-            title: widget.contentBuilder(
-              context,
-              widget.isExpanded.value,
-              _contentAnimation,
-            ),
-          ),
+          widget.headerBuilder?.call(
+                context,
+                _handleTap,
+                widget.canExpand
+                    ? widget.expanderBuilder(
+                        context,
+                        widget.isExpanded.value,
+                        _expanderAnimation,
+                      )
+                    : null,
+                widget.contentBuilder(
+                  context,
+                  widget.isExpanded.value,
+                  _contentAnimation,
+                ),
+              ) ??
+              ListTile(
+                onTap: _handleTap,
+                leading: widget.canExpand
+                    ? widget.expanderBuilder(
+                        context,
+                        widget.isExpanded.value,
+                        _expanderAnimation,
+                      )
+                    : null,
+                title: widget.contentBuilder(
+                  context,
+                  widget.isExpanded.value,
+                  _contentAnimation,
+                ),
+              ),
           SizeTransition(
             sizeFactor: _contentAnimation,
             child: Column(children: widget.children),
