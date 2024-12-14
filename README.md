@@ -5,9 +5,9 @@
 
 An elegant, flexible Treeview with Animation. Display hierarchical data in Flutter.
 
-![Logo](/example/assets//images/arborio_small.png)
+![Logo](https://github.com/MelbourneDeveloper/arborio/raw/main/example/assets/images/arborio_small.png)
 
-![Sample](/images/sample.gif)
+![Sample](https://github.com/MelbourneDeveloper/arborio/raw/main/images/sample.gif)
 
 Check out the live sample app [here](https://melbournedeveloper.github.io/arborio/)
 
