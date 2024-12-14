@@ -145,6 +145,8 @@ const fingerPointer = Text(
   style: TextStyle(fontSize: 16),
 );
 
+enum DisplayStyle { modern, retro }
+
 // The main app widget
 void main() {
   runApp(const MyApp());
@@ -165,6 +167,7 @@ class _MyAppState extends State<MyApp> {
   final textEditingController = TextEditingController(text: '500');
   TreeNode<FileSystemElement>? _selectedNode;
   final List<TreeNode<FileSystemElement>> _fileTree = fileTree();
+  DisplayStyle _displayStyle = DisplayStyle.modern;
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -231,6 +234,8 @@ class _MyAppState extends State<MyApp> {
                   _dropDownsRow(),
                   const SizedBox(width: 16),
                   _buttonRow(),
+                  const SizedBox(width: 16),
+                  _styleToggle(),
                 ],
               ),
             ),
@@ -382,6 +387,27 @@ class _MyAppState extends State<MyApp> {
         ],
       );
 
+  Widget _styleToggle() => SegmentedButton<DisplayStyle>(
+        segments: const [
+          ButtonSegment(
+            value: DisplayStyle.modern,
+            label: Text('Modern'),
+            icon: Icon(Icons.style),
+          ),
+          ButtonSegment(
+            value: DisplayStyle.retro,
+            label: Text('Retro'),
+            icon: Icon(Icons.terminal),
+          ),
+        ],
+        selected: {_displayStyle},
+        onSelectionChanged: (newSelection) {
+          setState(() {
+            _displayStyle = newSelection.first;
+          });
+        },
+      );
+
   TreeView<FileSystemElement> _treeView() => TreeView(
         onSelectionChanged: (node) => setState(() => _selectedNode = node),
         key: treeViewKey,
@@ -439,8 +465,20 @@ class _MyAppState extends State<MyApp> {
         _ => Curves.easeInOut,
       };
 
-  /// Renders file nodes
-  InkWell _file(
+  /// Renders file nodes with different styles based on the selected display 
+  /// style
+  Widget _file(
+    void Function(TreeNode<FileSystemElement> node) select,
+    TreeNode<FileSystemElement> node,
+    bool isSelected,
+    BuildContext context,
+  ) =>
+      switch (_displayStyle) {
+        DisplayStyle.modern => _modernFile(select, node, isSelected, context),
+        DisplayStyle.retro => _retroFile(select, node, isSelected, context),
+      };
+
+  Widget _modernFile(
     void Function(TreeNode<FileSystemElement> node) select,
     TreeNode<FileSystemElement> node,
     bool isSelected,
@@ -448,9 +486,8 @@ class _MyAppState extends State<MyApp> {
   ) =>
       InkWell(
         onTap: () => select(node),
-        // ignore: use_decorated_box
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8),
+          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
             gradient: isSelected
                 ? LinearGradient(
@@ -468,50 +505,227 @@ class _MyAppState extends State<MyApp> {
                     end: Alignment.bottomRight,
                   )
                 : null,
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withValues(alpha:0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    )
+                  ,]
+                : null,
           ),
           child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(12),
             child: Row(
               children: [
-                imageAsset(
-                  switch (path.extension(node.data.name).toLowerCase()) {
-                    ('.mp3') => 'assets/images/music.png',
-                    ('.py') => 'assets/images/python.png',
-                    ('.jpg') => 'assets/images/image.png',
-                    ('.png') => 'assets/images/image.png',
-                    ('.dart') => 'assets/images/dart.png',
-                    ('.json') => 'assets/images/json.png',
-                    (_) => 'assets/images/file.png'
-                  },
-                  width: 32,
-                  height: 32,
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primaryContainer
+                        .withValues(alpha: 0.3),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    switch (path.extension(node.data.name).toLowerCase()) {
+                      ('.mp3') => Icons.music_note,
+                      ('.py') => Icons.code,
+                      ('.jpg' || '.png') => Icons.image,
+                      ('.dart') => Icons.flutter_dash,
+                      ('.json') => Icons.data_object,
+                      _ => Icons.insert_drive_file,
+                    },
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
                 const SizedBox(width: 16),
-                Text(node.data.name),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        node.data.name,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      Text(
+                        'File Type: '
+                        '${path.extension(node.data.name).toUpperCase()}',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
         ),
       );
 
-  /// Renders tree nodes
-  Row _folder(
+  Widget _retroFile(
+    void Function(TreeNode<FileSystemElement> node) select,
+    TreeNode<FileSystemElement> node,
+    bool isSelected,
+    BuildContext context,
+  ) =>
+      InkWell(
+        onTap: () => select(node),
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.green.withValues(alpha: 0.2) : null,
+            border: Border.all(
+              color: Colors.green.withValues(alpha:  0.5),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Row(
+              children: [
+                Text(
+                  switch (path.extension(node.data.name).toLowerCase()) {
+                    ('.mp3') => '♪',
+                    ('.py') => r'$',
+                    ('.jpg' || '.png') => '⚡',
+                    ('.dart') => '⚔',
+                    ('.json') => '{}',
+                    _ => '>'
+                  },
+                  style: const TextStyle(
+                    color: Colors.green,
+                    fontFamily: 'monospace',
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  node.data.name,
+                  style: const TextStyle(
+                    color: Colors.green,
+                    fontFamily: 'monospace',
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+  /// Renders folder nodes with different styles based on the selected display 
+  /// style
+  Widget _folder(
     Animation<double> expansionAnimation,
     TreeNode<FileSystemElement> node,
   ) =>
-      Row(
-        children: [
-          RotationTransition(
-            turns: expansionAnimation,
-            child: imageAsset(
-              'assets/images/folder.png',
-              width: 32,
-              height: 32,
-            ),
+      switch (_displayStyle) {
+        DisplayStyle.modern => _modernFolder(expansionAnimation, node),
+        DisplayStyle.retro => _retroFolder(expansionAnimation, node),
+      };
+
+  Widget _modernFolder(
+    Animation<double> expansionAnimation,
+    TreeNode<FileSystemElement> node,
+  ) =>
+      Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.blue.withValues(alpha:0.2),
+              Colors.purple.withValues(alpha:0.2),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          const SizedBox(width: 16),
-          Text(node.data.name),
-        ],
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: [
+              RotationTransition(
+                turns: expansionAnimation,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withValues(alpha:0.2),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    Icons.folder,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    node.data.name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'Directory',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+
+  Widget _retroFolder(
+    Animation<double> expansionAnimation,
+    TreeNode<FileSystemElement> node,
+  ) =>
+      Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.green.withValues(alpha:0.5),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: Row(
+            children: [
+              RotationTransition(
+                turns: expansionAnimation,
+                child: const Text(
+                  '▶',
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontFamily: 'monospace',
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '[${node.data.name}]',
+                style: const TextStyle(
+                  color: Colors.green,
+                  fontFamily: 'monospace',
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       );
 }
