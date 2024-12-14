@@ -386,39 +386,7 @@ class _MyAppState extends State<MyApp> {
         onSelectionChanged: (node) => setState(() => _selectedNode = node),
         key: treeViewKey,
         animationDuration: Duration(milliseconds: _animationDuration),
-        animationCurve: switch (_selectedCurve) {
-          ('bounceIn') => Curves.bounceIn,
-          ('bounceInOut') => Curves.bounceInOut,
-          ('bounceOut') => Curves.bounceOut,
-          ('easeInCirc') => Curves.easeInCirc,
-          ('easeInOutExpo') => Curves.easeInOutExpo,
-          ('elasticInOut') => Curves.elasticInOut,
-          ('easeInOut') => Curves.easeInOut,
-          ('easeOutCirc') => Curves.easeOutCirc,
-          ('elasticOut') => Curves.elasticOut,
-          ('elasticIn') => Curves.elasticIn,
-          ('easeIn') => Curves.easeIn,
-          ('ease') => Curves.ease,
-          ('easeInBack') => Curves.easeInBack,
-          ('easeOutBack') => Curves.easeOutBack,
-          ('easeInOutBack') => Curves.easeInOutBack,
-          ('easeInSine') => Curves.easeInSine,
-          ('easeOutSine') => Curves.easeOutSine,
-          ('easeInOutSine') => Curves.easeInOutSine,
-          ('easeInQuad') => Curves.easeInQuad,
-          ('easeOutQuad') => Curves.easeOutQuad,
-          ('easeInOutQuad') => Curves.easeInOutQuad,
-          ('easeInQuart') => Curves.easeInQuart,
-          ('easeOutQuart') => Curves.easeOutQuart,
-          ('easeInOutQuart') => Curves.easeInOutQuart,
-          ('easeInQuint') => Curves.easeInQuint,
-          ('easeOutQuint') => Curves.easeOutQuint,
-          ('easeInOutQuint') => Curves.easeInOutQuint,
-          ('easeInExpo') => Curves.easeInExpo,
-          ('easeOutExpo') => Curves.easeOutExpo,
-          ('linear') => Curves.linear,
-          _ => Curves.easeInOut,
-        },
+        animationCurve: _getAnimationCurve(),
         builder: (
           context,
           node,
@@ -427,73 +395,123 @@ class _MyAppState extends State<MyApp> {
           select,
         ) =>
             switch (node.data.type) {
-          (ElementType.file) => InkWell(
-              onTap: () => select(node),
-              // ignore: use_decorated_box
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 8),
-                decoration: BoxDecoration(
-                  gradient: isSelected
-                      ? LinearGradient(
-                          colors: [
-                            Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withValues(alpha: 0.3),
-                            Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withValues(alpha: 0.1),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        )
-                      : null,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Row(
-                    children: [
-                      imageAsset(
-                        switch (path.extension(node.data.name).toLowerCase()) {
-                          ('.mp3') => 'assets/images/music.png',
-                          ('.py') => 'assets/images/python.png',
-                          ('.jpg') => 'assets/images/image.png',
-                          ('.png') => 'assets/images/image.png',
-                          ('.dart') => 'assets/images/dart.png',
-                          ('.json') => 'assets/images/json.png',
-                          (_) => 'assets/images/file.png'
-                        },
-                        width: 32,
-                        height: 32,
-                      ),
-                      const SizedBox(width: 16),
-                      Text(node.data.name),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          (ElementType.folder) => Row(
-              children: [
-                RotationTransition(
-                  turns: expansionAnimation,
-                  child: imageAsset(
-                    'assets/images/folder.png',
-                    width: 32,
-                    height: 32,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Text(node.data.name),
-              ],
-            ),
+          (ElementType.file) => _file(select, node, isSelected, context),
+          (ElementType.folder) => _folder(expansionAnimation, node),
         },
         nodes: _fileTree,
         expanderBuilder: (context, node, animationValue) => RotationTransition(
           turns: animationValue,
           child: _expander,
         ),
+      );
+
+  Curve _getAnimationCurve() => switch (_selectedCurve) {
+        ('bounceIn') => Curves.bounceIn,
+        ('bounceInOut') => Curves.bounceInOut,
+        ('bounceOut') => Curves.bounceOut,
+        ('easeInCirc') => Curves.easeInCirc,
+        ('easeInOutExpo') => Curves.easeInOutExpo,
+        ('elasticInOut') => Curves.elasticInOut,
+        ('easeInOut') => Curves.easeInOut,
+        ('easeOutCirc') => Curves.easeOutCirc,
+        ('elasticOut') => Curves.elasticOut,
+        ('elasticIn') => Curves.elasticIn,
+        ('easeIn') => Curves.easeIn,
+        ('ease') => Curves.ease,
+        ('easeInBack') => Curves.easeInBack,
+        ('easeOutBack') => Curves.easeOutBack,
+        ('easeInOutBack') => Curves.easeInOutBack,
+        ('easeInSine') => Curves.easeInSine,
+        ('easeOutSine') => Curves.easeOutSine,
+        ('easeInOutSine') => Curves.easeInOutSine,
+        ('easeInQuad') => Curves.easeInQuad,
+        ('easeOutQuad') => Curves.easeOutQuad,
+        ('easeInOutQuad') => Curves.easeInOutQuad,
+        ('easeInQuart') => Curves.easeInQuart,
+        ('easeOutQuart') => Curves.easeOutQuart,
+        ('easeInOutQuart') => Curves.easeInOutQuart,
+        ('easeInQuint') => Curves.easeInQuint,
+        ('easeOutQuint') => Curves.easeOutQuint,
+        ('easeInOutQuint') => Curves.easeInOutQuint,
+        ('easeInExpo') => Curves.easeInExpo,
+        ('easeOutExpo') => Curves.easeOutExpo,
+        ('linear') => Curves.linear,
+        _ => Curves.easeInOut,
+      };
+
+  /// Renders file nodes
+  InkWell _file(
+    void Function(TreeNode<FileSystemElement> node) select,
+    TreeNode<FileSystemElement> node,
+    bool isSelected,
+    BuildContext context,
+  ) =>
+      InkWell(
+        onTap: () => select(node),
+        // ignore: use_decorated_box
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration(
+            gradient: isSelected
+                ? LinearGradient(
+                    colors: [
+                      Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withValues(alpha: 0.3),
+                      Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withValues(alpha: 0.1),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )
+                : null,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              children: [
+                imageAsset(
+                  switch (path.extension(node.data.name).toLowerCase()) {
+                    ('.mp3') => 'assets/images/music.png',
+                    ('.py') => 'assets/images/python.png',
+                    ('.jpg') => 'assets/images/image.png',
+                    ('.png') => 'assets/images/image.png',
+                    ('.dart') => 'assets/images/dart.png',
+                    ('.json') => 'assets/images/json.png',
+                    (_) => 'assets/images/file.png'
+                  },
+                  width: 32,
+                  height: 32,
+                ),
+                const SizedBox(width: 16),
+                Text(node.data.name),
+              ],
+            ),
+          ),
+        ),
+      );
+
+  /// Renders tree nodes
+  Row _folder(
+    Animation<double> expansionAnimation,
+    TreeNode<FileSystemElement> node,
+  ) =>
+      Row(
+        children: [
+          RotationTransition(
+            turns: expansionAnimation,
+            child: imageAsset(
+              'assets/images/folder.png',
+              width: 32,
+              height: 32,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Text(node.data.name),
+        ],
       );
 }
