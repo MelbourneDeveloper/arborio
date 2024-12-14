@@ -1,3 +1,6 @@
+## 1.0.1
+* Minor doco fix
+
 ## 1.0.0
 * Full release
 * Improved documentation
