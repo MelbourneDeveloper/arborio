@@ -54,6 +54,7 @@ class Expander<T> extends StatefulWidget {
     this.animationDuration = const Duration(milliseconds: 500),
     this.contentPadding,
     this.minHeight,
+    this.minVerticalPadding,
   });
 
   /// The widgets to show when the expander is expanded.
@@ -86,6 +87,9 @@ class Expander<T> extends StatefulWidget {
   /// The minimum height of the tile. The default depends on factors that may be out of your
   /// control so it is recommended to set this value.
   final double? minHeight;
+
+  /// The minimum vertical padding of the tile. The default is 4.0.
+  final double? minVerticalPadding;
 
   @override
   State<Expander<T>> createState() => _ExpanderState();
@@ -169,6 +173,7 @@ class _ExpanderState<T> extends State<Expander<T>>
             minTileHeight: widget.minHeight,
             contentPadding: widget.contentPadding,
             onTap: _handleTap,
+            minVerticalPadding: widget.minVerticalPadding,
             leading: widget.canExpand
                 ? widget.expanderBuilder(
                     context,

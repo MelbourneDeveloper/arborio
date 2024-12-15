@@ -24,7 +24,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final treeViewKey = const TreeViewKey<FileSystemElement>();
   String _selectedCurve = 'easeInOut';
-  Widget _expander = defaultExpander;
+  Widget _expando = defaultExpander;
+  Widget createExpander() =>
+      _displayStyle == DisplayStyle.retro ? const SizedBox.shrink() : _expando;
   int _animationDuration = 500;
   final textEditingController = TextEditingController(text: '500');
   TreeNode<FileSystemElement>? _selectedNode;
@@ -140,8 +142,8 @@ class _MyAppState extends State<MyApp> {
         children: [
           DropdownMenu<Widget>(
             label: const Text('Expander'),
-            onSelected: (v) => setState(() => _expander = v ?? _expander),
-            initialSelection: _expander,
+            onSelected: (v) => setState(() => _expando = v ?? _expando),
+            initialSelection: _expando,
             dropdownMenuEntries: const [
               DropdownMenuEntry(value: fingerPointer, label: '👉'),
               DropdownMenuEntry(
@@ -289,8 +291,11 @@ class _MyAppState extends State<MyApp> {
 
   /// The tree view widget
   TreeView<FileSystemElement> _treeView() => TreeView(
-        nodeContentPadding:
-            _displayStyle == DisplayStyle.crazy ? null : EdgeInsets.zero,
+        nodeContentPadding: switch (_displayStyle) {
+          DisplayStyle.crazy => null,
+          DisplayStyle.retro => const EdgeInsets.symmetric(vertical: 4),
+          _ => EdgeInsets.zero
+        },
         onSelectionChanged: (node) => setState(() => _selectedNode = node),
         key: treeViewKey,
         animationDuration: Duration(milliseconds: _animationDuration),
@@ -314,10 +319,11 @@ class _MyAppState extends State<MyApp> {
             _displayStyle == DisplayStyle.crazy
                 ? RotationTransition(
                     turns: animationValue,
-                    child: _expander,
+                    child: createExpander(),
                   )
-                : _expander,
-        minNodeHeight: 0,
+                : createExpander(),
+        minNodeHeight: _displayStyle == DisplayStyle.retro ? 0 : null,
+        minNodeVerticalPadding: _displayStyle == DisplayStyle.retro ? 0 : null,
       );
 
   /// Renders file nodes with different styles based on the selected display
@@ -441,39 +447,39 @@ class _MyAppState extends State<MyApp> {
     bool isSelected,
     BuildContext context,
   ) =>
-      InkWell(
-        onTap: () => select(node),
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-          decoration: BoxDecoration(
-            color: isSelected ? Colors.green.withValues(alpha: 0.2) : null,
-            border: Border.all(
-              color: Colors.green.withValues(alpha: 0.5),
+      SizedBox(
+        height: 24,
+        child: InkWell(
+          onTap: () => select(node),
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(42, 0, 0, 0),
+            decoration: BoxDecoration(
+              color: isSelected ? Colors.green.withValues(alpha: 0.2) : null,
+              border: Border.all(
+                color: Colors.green.withValues(alpha: 0.5),
+              ),
             ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  switch (path.extension(node.data.name).toLowerCase()) {
-                    ('.mp3') => '♪',
-                    ('.py') => r'$',
-                    ('.jpg' || '.png') => '⚡',
-                    ('.dart') => '⚔',
-                    ('.json') => '{}',
-                    _ => '>'
-                  },
-                  style: const TextStyle(
-                    color: Colors.green,
-                    fontFamily: 'monospace',
-                    fontSize: 14,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Row(
+                children: [
+                  Text(
+                    switch (path.extension(node.data.name).toLowerCase()) {
+                      ('.mp3') => '♪',
+                      ('.py') => r'$',
+                      ('.jpg' || '.png') => '⚡',
+                      ('.dart') => '⚔',
+                      ('.json') => '{}',
+                      _ => '>'
+                    },
+                    style: const TextStyle(
+                      color: Colors.green,
+                      fontFamily: 'monospace',
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 6),
-                Flexible(
-                  child: Text(
+                  const SizedBox(width: 6),
+                  Text(
                     node.data.name,
                     style: const TextStyle(
                       color: Colors.green,
@@ -482,8 +488,8 @@ class _MyAppState extends State<MyApp> {
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -502,7 +508,7 @@ class _MyAppState extends State<MyApp> {
       };
 
   /// Renders file nodes
-  InkWell _crazyFile(
+  Widget _crazyFile(
     void Function(TreeNode<FileSystemElement> node) select,
     TreeNode<FileSystemElement> node,
     bool isSelected,
@@ -511,8 +517,7 @@ class _MyAppState extends State<MyApp> {
       InkWell(
         onTap: () => select(node),
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8),
-          constraints: const BoxConstraints(maxWidth: 400),
+          margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
           decoration: BoxDecoration(
             gradient: isSelected
                 ? LinearGradient(
@@ -533,7 +538,7 @@ class _MyAppState extends State<MyApp> {
             borderRadius: BorderRadius.circular(4),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(6),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -547,13 +552,14 @@ class _MyAppState extends State<MyApp> {
                     ('.json') => 'assets/images/json.png',
                     (_) => 'assets/images/file.png'
                   },
-                  width: 32,
-                  height: 32,
+                  width: 24,
+                  height: 24,
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 8),
                 Flexible(
                   child: Text(
                     node.data.name,
+                    style: const TextStyle(fontSize: 12),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -637,32 +643,36 @@ class _MyAppState extends State<MyApp> {
     TreeNode<FileSystemElement> node,
   ) =>
       Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        margin: EdgeInsets.zero,
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.green.withValues(alpha: 0.5),
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
                 '▶',
                 style: TextStyle(
                   color: Colors.green,
                   fontFamily: 'monospace',
-                  fontSize: 16,
+                  fontSize: 14,
                 ),
               ),
-              const SizedBox(width: 8),
-              Text(
-                '[${node.data.name}]',
-                style: const TextStyle(
-                  color: Colors.green,
-                  fontFamily: 'monospace',
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  '[${node.data.name}]',
+                  style: const TextStyle(
+                    color: Colors.green,
+                    fontFamily: 'monospace',
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
