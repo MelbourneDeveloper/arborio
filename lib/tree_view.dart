@@ -118,7 +118,10 @@ class TreeView<T> extends StatefulWidget {
     this.indentation = const SizedBox(width: 16),
     super.key,
     this.animationCurve = Curves.easeInOut,
+    this.nodeContentPadding,
     this.animationDuration = const Duration(milliseconds: 500),
+    this.minNodeHeight,
+    this.minNodeVerticalPadding,
   })  : _onExpansionChanged = onExpansionChanged ?? _defaultExpansionChanged,
         _onSelectionChanged = onSelectionChanged ?? _defaultSelectionChanged;
 
@@ -148,6 +151,16 @@ class TreeView<T> extends StatefulWidget {
 
   /// The duration of expand/collapse animations.
   final Duration animationDuration;
+
+  /// The padding around the content inside the node. The default is 16.0.
+  final EdgeInsetsGeometry? nodeContentPadding;
+
+  /// The minimum height of the node. The default depends on factors that may be out of your
+  /// control so it is recommended to set this value.
+  final double? minNodeHeight;
+
+  /// The minimum vertical padding of the node. The default is 16.0.
+  final double? minNodeVerticalPadding;
 
   @override
   State<TreeView<T>> createState() => _TreeViewState<T>();
@@ -209,10 +222,14 @@ class _TreeViewState<T> extends State<TreeView<T>> {
       Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             widget.indentation,
             Expanded(
               child: Expander<T>(
+                minVerticalPadding: widget.minNodeVerticalPadding,
+                minHeight: widget.minNodeHeight,
+                contentPadding: widget.nodeContentPadding,
                 animationDuration: widget.animationDuration,
                 animationCurve: widget.animationCurve,
                 expanderBuilder: widget.expanderBuilder,
