@@ -451,44 +451,50 @@ class _MyAppState extends State<MyApp> {
         height: 24,
         child: InkWell(
           onTap: () => select(node),
-          child: Container(
-            margin: const EdgeInsets.fromLTRB(42, 0, 0, 0),
-            decoration: BoxDecoration(
-              color: isSelected ? Colors.green.withValues(alpha: 0.2) : null,
-              border: Border.all(
-                color: Colors.green.withValues(alpha: 0.5),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              margin: const EdgeInsets.fromLTRB(42, 0, 0, 0),
+              decoration: BoxDecoration(
+                color: isSelected ? Colors.green.withValues(alpha: 0.2) : null,
+                border: Border.all(
+                  color: Colors.green.withValues(alpha: 0.5),
+                ),
               ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Row(
-                children: [
-                  Text(
-                    switch (path.extension(node.data.name).toLowerCase()) {
-                      ('.mp3') => '♪',
-                      ('.py') => r'$',
-                      ('.jpg' || '.png') => '⚡',
-                      ('.dart') => '⚔',
-                      ('.json') => '{}',
-                      _ => '>'
-                    },
-                    style: const TextStyle(
-                      color: Colors.green,
-                      fontFamily: 'monospace',
-                      fontSize: 14,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      switch (path.extension(node.data.name).toLowerCase()) {
+                        ('.mp3') => '♪',
+                        ('.py') => r'$',
+                        ('.jpg' || '.png') => '⚡',
+                        ('.dart') => '⚔',
+                        ('.json') => '{}',
+                        _ => '>'
+                      },
+                      style: const TextStyle(
+                        color: Colors.green,
+                        fontFamily: 'monospace',
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    node.data.name,
-                    style: const TextStyle(
-                      color: Colors.green,
-                      fontFamily: 'monospace',
-                      fontSize: 12,
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: Text(
+                        node.data.name,
+                        style: const TextStyle(
+                          color: Colors.green,
+                          fontFamily: 'monospace',
+                          fontSize: 12,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -642,40 +648,43 @@ class _MyAppState extends State<MyApp> {
     Animation<double> expansionAnimation,
     TreeNode<FileSystemElement> node,
   ) =>
-      Container(
-        margin: EdgeInsets.zero,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.green.withValues(alpha: 0.5),
+      Align(
+        alignment: Alignment.centerLeft,
+        child: Container(
+          margin: EdgeInsets.zero,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.green.withValues(alpha: 0.5),
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                '▶',
-                style: TextStyle(
-                  color: Colors.green,
-                  fontFamily: 'monospace',
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(width: 6),
-              Flexible(
-                child: Text(
-                  '[${node.data.name}]',
-                  style: const TextStyle(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  '▶',
+                  style: TextStyle(
                     color: Colors.green,
                     fontFamily: 'monospace',
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ],
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    '[${node.data.name}]',
+                    style: const TextStyle(
+                      color: Colors.green,
+                      fontFamily: 'monospace',
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
