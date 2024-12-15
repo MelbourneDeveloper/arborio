@@ -120,6 +120,7 @@ class TreeView<T> extends StatefulWidget {
     this.animationCurve = Curves.easeInOut,
     this.nodeContentPadding,
     this.animationDuration = const Duration(milliseconds: 500),
+    this.minNodeHeight,
   })  : _onExpansionChanged = onExpansionChanged ?? _defaultExpansionChanged,
         _onSelectionChanged = onSelectionChanged ?? _defaultSelectionChanged;
 
@@ -152,6 +153,10 @@ class TreeView<T> extends StatefulWidget {
 
   /// The padding around the content inside the node. The default is 16.0.
   final EdgeInsetsGeometry? nodeContentPadding;
+
+  /// The minimum height of the node. The default depends on factors that may be out of your
+  /// control so it is recommended to set this value.
+  final double? minNodeHeight;
 
   @override
   State<TreeView<T>> createState() => _TreeViewState<T>();
@@ -217,6 +222,7 @@ class _TreeViewState<T> extends State<TreeView<T>> {
             widget.indentation,
             Expanded(
               child: Expander<T>(
+                minHeight: widget.minNodeHeight,
                 contentPadding: widget.nodeContentPadding,
                 animationDuration: widget.animationDuration,
                 animationCurve: widget.animationCurve,

@@ -317,6 +317,7 @@ class _MyAppState extends State<MyApp> {
                     child: _expander,
                   )
                 : _expander,
+        minNodeHeight: 0,
       );
 
   /// Renders file nodes with different styles based on the selected display
